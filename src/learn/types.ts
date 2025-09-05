@@ -39,5 +39,16 @@ class Rectangle extends AbstractShape{
     getArea(): number{
         return (this._width * this._height);
     }
+}
 
+class Circle extends AbstractShape
+{
+    private _radius: number;
+    constructor(name: string, radius: number){
+        super(name, false);
+        this._radius = radius;
+    }
+    getArea(): number {
+        return (Math.PI * this._radius * this._radius)
+    }
 }

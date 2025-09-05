@@ -25,4 +25,14 @@ class Rectangle extends AbstractShape {
         return (this._width * this._height);
     }
 }
+class Circle extends AbstractShape {
+    _radius;
+    constructor(name, radius) {
+        super(name, false);
+        this._radius = radius;
+    }
+    getArea() {
+        return (Math.PI * this._radius * this._radius);
+    }
+}
 //# sourceMappingURL=types.js.map
