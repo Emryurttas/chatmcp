@@ -1,6 +1,6 @@
 console.log("--------------------------------------------------- addNumbers ");
 
-function addNumbers(x, y) {
+function addNumbers(x: number, y: number) {
     return x + y;
 }
 
