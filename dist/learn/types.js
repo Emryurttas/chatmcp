@@ -5,4 +5,12 @@ function dotProduct(vector1, vector2) {
 }
 console.log("dotProduct ---------------------------------------------------");
 console.log(dotProduct({ x: 3, y: 2 }, { x: 4, y: 5 })); // doit afficher 22
+class AbstractShape {
+    name;
+    isPolygon;
+    constructor(name, isPolygon) {
+        this.name = name;
+        this.isPolygon = isPolygon;
+    }
+}
 //# sourceMappingURL=types.js.map

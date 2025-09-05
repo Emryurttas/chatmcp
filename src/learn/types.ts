@@ -15,3 +15,14 @@ interface Shape {
     readonly isPolygon: boolean;
     getArea(): number;
 }
+
+abstract class AbstractShape {
+    readonly name: string;
+    readonly isPolygon: boolean;
+    constructor(name: string, isPolygon: boolean)
+    {
+        this.name = name;
+        this.isPolygon = isPolygon;
+    }
+    abstract getArea():number;
+}
