@@ -1,6 +1,6 @@
 interface Vector2D{
-    x: number,
-    y: number
+    x: number;
+    y: number;
 }
 
 function dotProduct(vector1: Vector2D, vector2: Vector2D) {
@@ -10,3 +10,8 @@ function dotProduct(vector1: Vector2D, vector2: Vector2D) {
 console.log("dotProduct ---------------------------------------------------");
 console.log(dotProduct({ x : 3, y : 2 }, { x : 4, y : 5 })); // doit afficher 22
     
+interface Shape {
+    readonly name: string;
+    readonly isPolygon: boolean;
+    getArea(): number;
+}
