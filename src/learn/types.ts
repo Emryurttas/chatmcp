@@ -41,6 +41,13 @@ class Rectangle extends AbstractShape{
     }
 }
 
+class Square extends Rectangle{
+    constructor(name: string, side: number)
+    {
+        super(name, side, side)
+    }
+}
+
 class Circle extends AbstractShape
 {
     private _radius: number;

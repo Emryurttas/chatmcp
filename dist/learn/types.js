@@ -25,6 +25,11 @@ class Rectangle extends AbstractShape {
         return (this._width * this._height);
     }
 }
+class Square extends Rectangle {
+    constructor(name, side) {
+        super(name, side, side);
+    }
+}
 class Circle extends AbstractShape {
     _radius;
     constructor(name, radius) {
