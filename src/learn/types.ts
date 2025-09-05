@@ -16,7 +16,7 @@ interface Shape {
     getArea(): number;
 }
 
-abstract class AbstractShape {
+abstract class AbstractShape implements Shape{
     readonly name: string;
     readonly isPolygon: boolean;
     constructor(name: string, isPolygon: boolean)
@@ -25,4 +25,19 @@ abstract class AbstractShape {
         this.isPolygon = isPolygon;
     }
     abstract getArea():number;
+}
+
+class Rectangle extends AbstractShape{
+    private _width: number;
+    private _height: number;
+    constructor(name: string, width: number, height: number)
+    {
+        super(name, true);
+        this._width = width;
+        this._height = height;
+    }
+    getArea(): number{
+        return (this._width * this._height);
+    }
+
 }

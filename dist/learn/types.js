@@ -13,4 +13,16 @@ class AbstractShape {
         this.isPolygon = isPolygon;
     }
 }
+class Rectangle extends AbstractShape {
+    _width;
+    _height;
+    constructor(name, width, height) {
+        super(name, true);
+        this._width = width;
+        this._height = height;
+    }
+    getArea() {
+        return (this._width * this._height);
+    }
+}
 //# sourceMappingURL=types.js.map
