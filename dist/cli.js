@@ -18,7 +18,8 @@ async function main() {
             console.log("Fin du programme.");
             break;
         }
-        const answer = await chat.send(userInput);
+        chat.addPrompt(userInput);
+        const answer = await chat.fetchAnswer();
         console.log(`${COLOR_ANSWER}ChatBot: ${answer}${COLOR_DEFAULT}`);
     }
     readLine.close();

@@ -17,18 +17,6 @@ export class ChatModel {
         this._chatId = ChatModel.repository.create([]);
     }
 
-    async send(prompt: string): Promise<string> {
-        ChatModel.repository.addMessages(this._chatId, [{ role: 'user', content: prompt }]);
-
-        const { text } = await generateText({
-            model: MODEL_NAME,
-            prompt: prompt
-        });
-
-        ChatModel.repository.addMessages(this._chatId, [{ role: 'bot', content: text }]);
-
-        return text;
-    }
     get chatId(): string {
         return this._chatId;
     }
@@ -40,10 +28,17 @@ export class ChatModel {
     private createGenerationConfig(): GenerationConfig {
         const messages = ChatModel.repository.find(this._chatId);
 
-
         return {
             model: MODEL_NAME,
             messages,
         };
+    }
+    async fetchAnswer(): Promise<string> {
+        const config = this.createGenerationConfig();
+        const { text, response } = await generateText(config);
+        if (response.messages){
+            ChatModel.repository.addMessages(this._chatId, [{ role: 'user', content: text },]);
+        }
+        return text;
     }
 }

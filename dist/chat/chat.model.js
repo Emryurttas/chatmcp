@@ -11,15 +11,6 @@ class ChatModel {
     constructor() {
         this._chatId = ChatModel.repository.create([]);
     }
-    async send(prompt) {
-        ChatModel.repository.addMessages(this._chatId, [{ role: 'user', content: prompt }]);
-        const { text } = await (0, ai_1.generateText)({
-            model: MODEL_NAME,
-            prompt: prompt
-        });
-        ChatModel.repository.addMessages(this._chatId, [{ role: 'bot', content: text }]);
-        return text;
-    }
     get chatId() {
         return this._chatId;
     }
@@ -32,6 +23,14 @@ class ChatModel {
             model: MODEL_NAME,
             messages,
         };
+    }
+    async fetchAnswer() {
+        const config = this.createGenerationConfig();
+        const { text, response } = await (0, ai_1.generateText)(config);
+        if (response.messages) {
+            ChatModel.repository.addMessages(this._chatId, [{ role: 'user', content: text },]);
+        }
+        return text;
     }
 }
 exports.ChatModel = ChatModel;
