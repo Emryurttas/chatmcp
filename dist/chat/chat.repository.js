@@ -26,8 +26,12 @@ class ChatRepository {
     }
     // ajoute des messages à la conversation associée à l'identifiant
     // lance une erreur si la conversation n'existe pas
-    addMessages(chatId, chat) {
-        throw new Error('Method not implemented.');
+    addMessages(chatId, messages) {
+        const chat = this.chats.get(chatId);
+        if (!chat) {
+            throw new Error(`chatId invalide : ${chatId}`);
+        }
+        chat.push(...messages);
     }
 }
 exports.ChatRepository = ChatRepository;
