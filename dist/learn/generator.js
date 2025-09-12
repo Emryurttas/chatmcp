@@ -12,4 +12,12 @@ console.log(generator.next());
 for (const i of simpleGenerator()) {
     console.log(i);
 }
+function* range(min, max) {
+    for (let i = min; i <= max; i++) {
+        yield i;
+    }
+}
+for (const i of range(5, 10)) {
+    console.log(i);
+}
 //# sourceMappingURL=generator.js.map
