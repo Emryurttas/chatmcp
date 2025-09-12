@@ -20,6 +20,9 @@ class ChatModel {
         ChatModel.repository.addMessages(this._chatId, [{ role: 'bot', content: text }]);
         return text;
     }
+    addPrompt(prompt) {
+        ChatModel.repository.addMessages(this._chatId, [{ role: 'user', content: prompt }]);
+    }
     get chatId() {
         return this._chatId;
     }

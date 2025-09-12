@@ -29,6 +29,10 @@ export class ChatModel {
 
         return text;
     }
+    
+    addPrompt(prompt: string): void {
+        ChatModel.repository.addMessages(this._chatId, [{ role: 'user', content: prompt }]);
+    }
 
 
     get chatId(): string {
