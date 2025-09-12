@@ -5,7 +5,7 @@ import { ChatRepository } from './chat.repository';
 const MODEL_NAME = google('gemini-2.0-flash');
 
 type ModelMessage = {
-    role: 'user';
+    role: 'user' | 'bot';
     content: string;
 }
 
@@ -18,13 +18,19 @@ export class ChatModel {
     }
 
     async send(prompt: string): Promise<string> {
-        
-        const {text} = await generateText({
+        ChatModel.repository.addMessages(this._chatId, [{ role: 'user', content: prompt }]);
+
+        const { text } = await generateText({
             model: MODEL_NAME,
             prompt: prompt
-        })
-        return text
+        });
+
+        ChatModel.repository.addMessages(this._chatId, [{ role: 'bot', content: text }]);
+
+        return text;
     }
+
+
     get chatId(): string {
         return this._chatId;
     }
