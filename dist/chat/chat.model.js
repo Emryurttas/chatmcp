@@ -20,11 +20,18 @@ class ChatModel {
         ChatModel.repository.addMessages(this._chatId, [{ role: 'bot', content: text }]);
         return text;
     }
+    get chatId() {
+        return this._chatId;
+    }
     addPrompt(prompt) {
         ChatModel.repository.addMessages(this._chatId, [{ role: 'user', content: prompt }]);
     }
-    get chatId() {
-        return this._chatId;
+    createGenerationConfig() {
+        const messages = ChatModel.repository.find(this._chatId);
+        return {
+            model: MODEL_NAME,
+            messages,
+        };
     }
 }
 exports.ChatModel = ChatModel;

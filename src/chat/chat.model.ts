@@ -29,13 +29,21 @@ export class ChatModel {
 
         return text;
     }
-    
+    get chatId(): string {
+        return this._chatId;
+    }
+
     addPrompt(prompt: string): void {
         ChatModel.repository.addMessages(this._chatId, [{ role: 'user', content: prompt }]);
     }
 
+    private createGenerationConfig(): GenerationConfig {
+        const messages = ChatModel.repository.find(this._chatId);
 
-    get chatId(): string {
-        return this._chatId;
+
+        return {
+            model: MODEL_NAME,
+            messages,
+        };
     }
 }
