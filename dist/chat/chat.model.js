@@ -32,6 +32,18 @@ class ChatModel {
         }
         return text;
     }
+    async *fetchAnswerStream() {
+        const config = this.createGenerationConfig();
+        const result = await (0, ai_1.streamText)(config);
+        let accumulated = "";
+        for await (const textPart of result.textStream) {
+            accumulated += textPart;
+            yield textPart;
+        }
+        ChatModel.repository.addMessages(this._chatId, [
+            { role: 'user', content: accumulated },
+        ]);
+    }
 }
 exports.ChatModel = ChatModel;
 //# sourceMappingURL=chat.model.js.map

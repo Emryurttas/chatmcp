@@ -1,5 +1,5 @@
 import { google } from '@ai-sdk/google';
-import { generateText } from 'ai';
+import { generateText, streamText } from 'ai';
 import { ChatRepository } from './chat.repository';
 
 const MODEL_NAME = google('gemini-2.0-flash');
@@ -40,5 +40,23 @@ export class ChatModel {
             ChatModel.repository.addMessages(this._chatId, [{ role: 'user', content: text },]);
         }
         return text;
+    }
+
+   
+    async *fetchAnswerStream(): AsyncGenerator<string> {
+        const config = this.createGenerationConfig();
+
+        const result = await streamText(config);
+
+        let accumulated = "";
+
+        for await (const textPart of result.textStream) {
+            accumulated += textPart;
+            yield textPart;
+        }
+
+        ChatModel.repository.addMessages(this._chatId, [
+        { role: 'user', content: accumulated },
+        ]);
     }
 }

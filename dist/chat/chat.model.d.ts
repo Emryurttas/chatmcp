@@ -6,5 +6,6 @@ export declare class ChatModel {
     addPrompt(prompt: string): void;
     private createGenerationConfig;
     fetchAnswer(): Promise<string>;
+    fetchAnswerStream(): AsyncGenerator<string>;
 }
 //# sourceMappingURL=chat.model.d.ts.map
