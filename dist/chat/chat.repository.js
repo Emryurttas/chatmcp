@@ -13,7 +13,7 @@ class ChatRepository {
     }
     // retourne vrai si une conversation existe, faux sinon
     exists(chatId) {
-        throw new Error('Method not implemented.');
+        return this.chats.has(chatId);
     }
     // retourne la conversation associée à l'identifiant
     // lance une erreur si la conversation n'existe pas

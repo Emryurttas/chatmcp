@@ -14,7 +14,7 @@ export class ChatRepository<Message> {
     
     // retourne vrai si une conversation existe, faux sinon
     exists(chatId: string): boolean {
-        throw new Error('Method not implemented.');
+        return this.chats.has(chatId);
     }
     
     // retourne la conversation associée à l'identifiant
