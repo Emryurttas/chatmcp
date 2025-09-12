@@ -10,8 +10,6 @@ export class ChatRepository<Message> {
         this.chats.set(id, chat);
         return id;
     }
-
-    
     // retourne vrai si une conversation existe, faux sinon
     exists(chatId: string): boolean {
         return this.chats.has(chatId);
@@ -20,7 +18,11 @@ export class ChatRepository<Message> {
     // retourne la conversation associée à l'identifiant
     // lance une erreur si la conversation n'existe pas
     find(chatId: string): Message[] {
-        throw new Error('Method not implemented.');
+        const chat = this.chats.get(chatId);
+        if (!chat) {
+            throw new Error(`chatId invalide : ${chatId}`);
+        }
+        return chat;
     }
 
     // ajoute des messages à la conversation associée à l'identifiant
