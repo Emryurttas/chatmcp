@@ -8,17 +8,20 @@ const readLine = createInterface({
 
 async function main() {
     const chat = new ChatModel();
-    let isDone = false; 
-    const answer = await chat.send("Bonjour");
-    console.log(answer); 
-    const question = readLine.question("saisir");
-    while(isDone === false){
-        const answer_next = await chat.send(await question);
-        if (answer_next == undefined)
-        {
-            isDone = true
+
+    while (true) {
+        const userInput = await readLine.question("Saisir un prompt (vide pour quitter) : ");
+
+        if (!userInput.trim()) {
+            console.log("Fin");
+            break;
         }
+
+        const answer = await chat.send(userInput);
+        console.log(answer);
     }
+
+    readLine.close();
 }
 
 main();
