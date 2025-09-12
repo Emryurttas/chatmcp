@@ -25,4 +25,7 @@ export class ChatModel {
         })
         return text
     }
+    get chatId(): string {
+        return this._chatId;
+    }
 }
