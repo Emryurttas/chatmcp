@@ -28,8 +28,9 @@ export function ChatView(props: { conversationId: string }): JSX.Element {
                             Envoyer
                         </button>
                     </form>
+                    
                     <div id="conversation-id">
-                        ID de la conversation : {props.conversationId}
+                        ID: {props.conversationId}
                     </div>
                 </body>
             </html>
