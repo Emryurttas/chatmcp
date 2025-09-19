@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const home_1 = require("./views/home");
 const error_page_1 = require("./views/error/error-page");
+const chat_controller_1 = require("./chat/chat.controller");
 const app = (0, express_1.default)();
 const port = process.env.PORT;
 app.use(express_1.default.static('public'));
@@ -13,11 +14,7 @@ app.get('/', (req, res) => {
     const page = (0, home_1.HomeView)({ title: "Acceuil" });
     res.send(page);
 });
-app.get('/chat', (req, res) => {
-    const now = new Date();
-    const heure = now.toLocaleTimeString('fr-FR');
-    res.send(`Bonjour. Il est ${heure}.`);
-});
+app.get('/chat', chat_controller_1.chatController.chat.bind(chat_controller_1.chatController));
 app.get('/time', (req, res) => {
     const now = new Date();
     const heure = now.toLocaleTimeString('fr-FR');
