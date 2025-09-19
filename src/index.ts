@@ -1,8 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { HomeView } from './views/home';
 import { ErrorPageView } from './views/error/error-page';
-import { chatController } from './chat/chat.controller';
-
+import chatRouter from './chat/chat.router';
 
 const app = express();
 const port = process.env.PORT;
@@ -14,8 +13,7 @@ app.get('/', (req: Request, res: Response) => {
     res.send(page);
 });
 
-app.get('/chat', chatController.chat.bind(chatController));
-
+app.use('/', chatRouter);
 
 app.get('/time', (req: Request, res: Response) => {
     const now = new Date();
