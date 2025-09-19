@@ -12,18 +12,24 @@ export function ChatView(props: { conversationId: string }): JSX.Element {
                     <script src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/htmx.js"></script>
                 </head>
                 <body>
-                    <div id="chat-box">
-                        <p>Bienvenue dans la conversation {props.conversationId}</p>
+                    <div id="chat">
+                        <p>Bienvenue sur ChatMCP</p>
                     </div>
-                    <form 
-                        hx-post={`/chat/message/${props.conversationId}`} 
-                        hx-target="#chat-box" 
-                        hx-swap="beforeend"
-                        hx-trigger="submit"
-                    >
-                        <input type="text" name="message" placeholder="Votre message..." required />
-                        <button type="submit">Envoyer</button>
+                    
+                    <form>
+                        <input type="text" id="prompt" name="prompt" placeholder="Votre message..." required />
+                        <button 
+                            type="submit"
+                            id="send"
+                            hx-post={`/chat/send/${props.conversationId}`}
+                            hx-target="#chat"
+                            hx-swap="beforeend">
+                            Envoyer
+                        </button>
                     </form>
+                    <div id="conversation-id">
+                        ID de la conversation : {props.conversationId}
+                    </div>
                 </body>
             </html>
         </>
