@@ -19,6 +19,9 @@ app.get('/chat', (req, res) => {
 app.get('/erreur', () => {
     throw new Error("Ceci est une erreur ");
 });
+app.use((err, req, res, next) => {
+    console.log(`ERREUR : ${err.message}`);
+});
 app.listen(port, () => {
     console.log(`Serveur local démarré : http://localhost:${port}`);
 });

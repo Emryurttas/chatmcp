@@ -20,6 +20,10 @@ app.get('/erreur', () => {
     throw new Error("Ceci est une erreur ");
 });
 
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    console.log(`ERREUR : ${err.message}`);
+});
+
 app.listen(port, () => {
     console.log(`Serveur local démarré : http://localhost:${port}`);
 });
