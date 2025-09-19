@@ -1,10 +1,13 @@
 import express, { Request, Response } from 'express';
+import { HomeView } from './views/home';
+
 
 const app = express();
 const port = process.env.PORT;
 
 app.get('/', (req: Request, res: Response) => {
-    res.send('Bonjour');
+    const page = HomeView( {title:"Acceuil"} );
+    res.send(page);
 });
 
 app.get('/chat', (req: Request, res: Response) => {

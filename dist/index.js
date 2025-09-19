@@ -4,10 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const home_1 = require("./views/home");
 const app = (0, express_1.default)();
 const port = process.env.PORT;
 app.get('/', (req, res) => {
-    res.send('Bonjour');
+    const page = (0, home_1.HomeView)({ title: "Acceuil" });
+    res.send(page);
 });
 app.get('/chat', (req, res) => {
     const now = new Date();
