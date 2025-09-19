@@ -14,6 +14,13 @@ export function HomeView(props: { title: string }): JSX.Element {
                 <body>
                     <h1>{props.title}</h1>
                     <a href="/chat">Chatbot</a>
+                    <button 
+                        id="heure-btn"
+                        hx-get="/time"
+                        hx-target="#heure-btn"
+                        hx-swap="outerHTML">
+                        Heure
+                    </button>
                 </body>
             </html>
         </>

@@ -18,6 +18,11 @@ app.get('/chat', (req, res) => {
     const heure = now.toLocaleTimeString('fr-FR');
     res.send(`Bonjour. Il est ${heure}.`);
 });
+app.get('/time', (req, res) => {
+    const now = new Date();
+    const heure = now.toLocaleTimeString('fr-FR');
+    res.send(`<button id="heure-btn" hx-get="/time" hx-target="#heure-btn" hx-swap="outerHTML">${heure}</button>`);
+});
 app.get('/erreur', () => {
     throw new Error("Ceci est une erreur ");
 });
