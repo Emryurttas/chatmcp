@@ -9,6 +9,11 @@ const port = 7000;
 app.get('/', (req, res) => {
     res.send('Bonjour');
 });
+app.get('/chat', (req, res) => {
+    const now = new Date();
+    const heure = now.toLocaleTimeString('fr-FR');
+    res.send(`Bonjour. Il est ${heure}.`);
+});
 app.listen(port, () => {
     console.log(`Serveur local démarré : http://localhost:${port}`);
 });
