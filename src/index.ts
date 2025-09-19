@@ -5,6 +5,8 @@ import { ErrorPageView } from './views/error/error-page';
 const app = express();
 const port = process.env.PORT;
 
+app.use(express.static('public'));
+
 app.get('/', (req: Request, res: Response) => {
     const page = HomeView( {title:"Acceuil"} );
     res.send(page);
