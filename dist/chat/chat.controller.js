@@ -10,6 +10,9 @@ class ChatController {
         const page = (0, chat_1.ChatView)({ conversationId });
         res.send(page);
     }
+    sendPrompt(req, res) {
+        res.send('<p>coucou</p>');
+    }
 }
 exports.ChatController = ChatController;
 exports.chatController = new ChatController();

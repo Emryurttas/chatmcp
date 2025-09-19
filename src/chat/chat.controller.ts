@@ -11,5 +11,8 @@ export class ChatController {
 
         res.send(page);
     }
+    public sendPrompt(req: Request, res: Response): void {
+        res.send('<p>coucou</p>');
+    }
 }
 export const chatController = new ChatController();
