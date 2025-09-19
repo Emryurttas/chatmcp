@@ -1,6 +1,6 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { HomeView } from './views/home';
-
+import { ErrorPageView } from './views/error/error-page';
 
 const app = express();
 const port = process.env.PORT;
@@ -22,7 +22,10 @@ app.get('/erreur', () => {
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.log(`ERREUR : ${err.message}`);
+    const page = ErrorPageView({message: err.message});
+    res.send(page);
 });
+
 
 app.listen(port, () => {
     console.log(`Serveur local démarré : http://localhost:${port}`);

@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const home_1 = require("./views/home");
+const error_page_1 = require("./views/error/error-page");
 const app = (0, express_1.default)();
 const port = process.env.PORT;
 app.get('/', (req, res) => {
@@ -21,6 +22,8 @@ app.get('/erreur', () => {
 });
 app.use((err, req, res, next) => {
     console.log(`ERREUR : ${err.message}`);
+    const page = (0, error_page_1.ErrorPageView)({ message: err.message });
+    res.send(page);
 });
 app.listen(port, () => {
     console.log(`Serveur local démarré : http://localhost:${port}`);
