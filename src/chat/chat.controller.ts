@@ -15,9 +15,10 @@ export class ChatController {
 
     public sendPrompt(req: Request, res: Response): void {
         const prompt = req.body.prompt;
-        console.log(prompt);
+        const conversationId = req.params.id;
+        console.log(conversationId);
 
-        const chatInstance = new ChatModel();
+        const chatInstance = new ChatModel(conversationId);
 
         chatInstance.addPrompt(prompt);
 
