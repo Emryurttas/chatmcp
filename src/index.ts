@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import { HomeView } from './views/home';
 import { ErrorPageView } from './views/error/error-page';
 import chatRouter from './chat/chat.router';
+import {ErrorDialogView} from "./chat/views/error-dialog";
 
 const app = express();
 const port = process.env.PORT;
@@ -31,8 +32,13 @@ app.get('/erreur', () => {
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.log(`ERREUR : ${err.message}`);
-    const page = ErrorPageView({message: err.message});
-    res.send(page);
+    if (req.headers['hx-request']) {
+        const dialog = ErrorDialogView({ message: err.message });
+        res.send(dialog);
+    } else {
+        const page = ErrorPageView({ message: err.message });
+        res.send(page);
+    }
 });
 
 
