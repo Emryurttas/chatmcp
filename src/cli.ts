@@ -10,7 +10,7 @@ const COLOR_ANSWER = '\x1b[96m';
 const COLOR_USER = '\x1b[92m';
 const COLOR_DEFAULT = '\x1b[0m';
 
-async function main() {
+async function main(config: { streaming: boolean }) {
 
     const chat = new ChatModel();
     console.log(`${COLOR_ANSWER}Bonjour ! Tapez votre question (vide pour quitter).${COLOR_DEFAULT}`);
@@ -22,13 +22,22 @@ async function main() {
             console.log("Fin du programme.");
             break;
         }
+
         chat.addPrompt(userInput);
 
-        const answer = await chat.fetchAnswer();
-        console.log(`${COLOR_ANSWER}ChatBot: ${answer}${COLOR_DEFAULT}`);
+        if (config.streaming) {
+            process.stdout.write(`${COLOR_ANSWER}ChatBot: `);
+            for await (const chunk of chat.fetchAnswerStream()) {
+                process.stdout.write(chunk);
+            }
+            console.log(COLOR_DEFAULT);
+        } else {
+            const answer = await chat.fetchAnswer();
+            console.log(`${COLOR_ANSWER}ChatBot: ${answer}${COLOR_DEFAULT}`);
+        }
     }
 
     readLine.close();
 }
-main();
 
+main({ streaming: true });
