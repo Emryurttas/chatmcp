@@ -12,7 +12,10 @@ export class ChatController {
         res.send(page);
     }
     public sendPrompt(req: Request, res: Response): void {
-        res.send('<p>coucou</p>');
+        const prompt = req.body.prompt;
+        console.log(prompt);
+
+        res.send(`<p>${prompt}</p>`);
     }
 }
 export const chatController = new ChatController();

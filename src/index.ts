@@ -6,6 +6,10 @@ import chatRouter from './chat/chat.router';
 const app = express();
 const port = process.env.PORT;
 
+app.use(express.urlencoded({ extended: true }));
+
+app.use(express.json());
+
 app.use(express.static('public'));
 
 app.get('/', (req: Request, res: Response) => {
