@@ -13,8 +13,16 @@ export class ChatModel {
     private _chatId: string;
     private static repository = new ChatRepository<ModelMessage>();
 
-    constructor() {
-        this._chatId = ChatModel.repository.create([]);
+    constructor(chatId?: string) {
+        if (chatId) {
+            const exists = ChatModel.repository.find(chatId);
+            if (!exists) {
+                throw new Error(`${chatId} "introuvable."`);
+            }
+            this._chatId = chatId;
+        } else {
+            this._chatId = ChatModel.repository.create([]);
+        }
     }
 
     get chatId(): string {
