@@ -17,6 +17,10 @@ export class ChatController {
         const prompt = req.body.prompt;
         console.log(prompt);
 
+        const chatInstance = new ChatModel();
+
+        chatInstance.addPrompt(prompt);
+
         const chatItemHtml = ChatItemView({ prompt });
 
         res.send(chatItemHtml);
