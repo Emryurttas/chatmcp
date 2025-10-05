@@ -1,5 +1,5 @@
 import { google } from '@ai-sdk/google';
-import { generateText, streamText } from 'ai';
+import { generateText, streamText, smoothStream } from 'ai';
 import { ChatRepository } from './chat.repository';
 
 const MODEL_NAME = google('gemini-2.0-flash');
@@ -7,7 +7,7 @@ const MODEL_NAME = google('gemini-2.0-flash');
 type ModelMessage = {
     role: 'user' | 'bot';
     content: string;
-}
+};
 
 export class ChatModel {
     private _chatId: string;
@@ -25,19 +25,26 @@ export class ChatModel {
         ChatModel.repository.addMessages(this._chatId, [{ role: 'user', content: prompt }]);
     }
 
-    private createGenerationConfig(): GenerationConfig {
+    private createGenerationConfig() {
         const messages = ChatModel.repository.find(this._chatId);
 
         return {
             model: MODEL_NAME,
-            messages,
+            messages: messages.map(m => {
+                const role: 'user' | 'assistant' = m.role === 'bot' ? 'assistant' : 'user';
+                return {
+                    role,
+                    content: m.content,
+                };
+            }),
         };
     }
     async fetchAnswer(): Promise<string> {
         const config = this.createGenerationConfig();
         const { text, response } = await generateText(config);
-        if (response.messages){
-            ChatModel.repository.addMessages(this._chatId, [{ role: 'user', content: text },]);
+
+        if (response.messages) {
+            ChatModel.repository.addMessages(this._chatId, [{ role: 'bot', content: text }]);
         }
         return text;
     }
@@ -46,7 +53,13 @@ export class ChatModel {
     async *fetchAnswerStream(): AsyncGenerator<string> {
         const config = this.createGenerationConfig();
 
-        const result = await streamText(config);
+        const result = streamText({
+            ...config,
+            experimental_transform: smoothStream({
+                delayInMs: 50,
+                chunking: 'word',
+            }),
+        });
 
         let accumulated = "";
 
@@ -56,7 +69,7 @@ export class ChatModel {
         }
 
         ChatModel.repository.addMessages(this._chatId, [
-        { role: 'user', content: accumulated },
+            { role: 'bot', content: accumulated },
         ]);
     }
 }
