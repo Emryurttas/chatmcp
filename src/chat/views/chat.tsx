@@ -11,6 +11,8 @@ export function ChatView(props: { conversationId: string }): JSX.Element {
                     <link rel="stylesheet" href="/css/chat.css" />
                     <link rel="stylesheet" href="/css/pico.min.css" />
                     <link rel="icon" href="/images/bot.png" />
+                    <link rel="stylesheet" href="/css/error-dialog.css" />
+
                     <script src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/htmx.js"></script>
                 </head>
                 <body>

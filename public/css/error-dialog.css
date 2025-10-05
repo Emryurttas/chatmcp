@@ -1,0 +1,57 @@
+.error-modal {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #2c2c2c;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    z-index: 9999;
+    width: 300px;
+}
+
+.error-modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.error-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.error-modal-icon {
+    font-size: 1.5rem;
+}
+
+.error-modal-title {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.error-modal-message {
+    margin: 0;
+}
+
+.error-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.error-modal-close-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.error-modal-close-button:hover {
+    background-color: #0056b3;
+}
