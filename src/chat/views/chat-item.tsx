@@ -1,6 +1,4 @@
-import React from 'react';
-
-interface ChatItemProps {
+export interface ChatItemProps {
     prompt: string;
 }
 
