@@ -1,12 +1,18 @@
 export interface ChatItemProps {
     prompt: string;
+    id: string;
 }
 
-export function ChatItemView({ prompt }: ChatItemProps) {
+export function ChatItemView({ prompt, id }: ChatItemProps) {
     return (
         <article className="chat-item">
             <p>{prompt}</p>
-            <div>coucou</div>
+            <div
+                hx-get={`/chat/query/${id}`}
+                hx-trigger="load"
+                hx-target="this"
+                hx-swap="innerHTML"
+            ></div>
         </article>
     );
 }
