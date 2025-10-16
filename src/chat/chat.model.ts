@@ -4,9 +4,11 @@ import { ChatRepository } from './chat.repository';
 
 const MODEL_NAME = google('gemini-2.0-flash');
 
-type ModelMessage = {
+export type Segment = { type: 'text'; text: string };
+
+export type ModelMessage = {
     role: 'user' | 'bot';
-    content: string;
+    content: string | Segment[];
 };
 
 export class ChatModel {

@@ -1,3 +1,33 @@
+import { ModelMessage } from '../chat.model';
+
+export function MessageItem({ message }: { message: ModelMessage }): JSX.Element {
+    let content: string;
+    if (typeof message.content === 'string') {
+        content = message.content;
+    } else {
+        content = message.content.map(s => s.text).join('');
+    }
+
+    if (message.role === 'user') {
+        return <article>{content}</article>;
+    } else {
+        return (
+            <tag of="render-markdown">
+                <script type="text/markdown">{content}</script>
+            </tag>
+        );
+    }
+}
+
+
+console.log(MessageItem({ message: { role: 'user', content: 'Bonjour' } }));
+console.log(MessageItem({ message: { role: 'bot', content: 'Bonjour, que puis-je faire pour vous ?' } }));
+console.log(
+    MessageItem({
+        message: { role: 'bot', content: [{ type: 'text', text: 'Votre code doit aussi gérer ce type de message.' }] },
+    })
+);
+
 export function ChatView(props: { conversationId: string }): JSX.Element {
     return (
         <>
@@ -28,7 +58,7 @@ export function ChatView(props: { conversationId: string }): JSX.Element {
                             <script type="text/markdown"># Bienvenue sur ChatMCP
 
                                 Posez vos questions ci-dessous et recevez des réponses instantanément. Utilisez le Markdown pour formater vos messages si besoin.</script>
-                            <script type="text/markdown">Commencez dès maintenant à interagir avec le chatbot ! Chaque réponse sera affichée au format Markdown ici.</script>
+                            <script type="text/markdown">Commencez dès maintenant à interagir avec le chatbot! Chaque réponse sera affichée au format Markdown ici.</script>
                         </tag>
                     </div>
 
@@ -50,5 +80,5 @@ export function ChatView(props: { conversationId: string }): JSX.Element {
                 </body>
             </html>
         </>
-    )
+    );
 }
