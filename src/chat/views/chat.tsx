@@ -74,19 +74,18 @@ export function ChatView(props: { conversationId: string; messages?: ModelMessag
                         hx-post={`/chat/send/${props.conversationId}`}
                         hx-target="#chat"
                         hx-swap="beforeend"
+                        hx-trigger="keydown[enter]"
+                        hx-on-after-request="this.querySelector('#prompt').value = ''"
                     >
                     <textarea
                         id="prompt"
                         name="prompt"
                         placeholder="Votre message..."
                         required
-                        hx-trigger="keydown[enter]"
-                        hx-post={`/chat/send/${props.conversationId}`}
-                        hx-target="#chat"
-                        hx-swap="beforeend"
                     ></textarea>
                         <button type="submit" id="send">Envoyer</button>
                     </form>
+
 
 
                     <script type="module" src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/autosize-textarea.js"></script>
