@@ -5,9 +5,22 @@ import { ChatItemView } from './views/chat-item';
 
 export class ChatController {
     public chat(req: Request, res: Response): void {
-        const chatInstance = new ChatModel();
-        const conversationId = chatInstance.chatId;
-        const page = ChatView({ conversationId });
+        const conversationId = req.query.id as string | undefined;
+        let chatInstance: ChatModel;
+
+        if (conversationId) {
+            chatInstance = new ChatModel(conversationId);
+        } else {
+            chatInstance = new ChatModel();
+        }
+
+        const messages = chatInstance.messages ?? [];
+
+        const page = ChatView({
+            conversationId: chatInstance.chatId,
+            messages,
+        });
+
         res.send(page);
     }
 

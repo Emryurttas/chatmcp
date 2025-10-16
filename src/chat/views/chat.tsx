@@ -9,7 +9,7 @@ export function MessageItem({ message }: { message: ModelMessage }): JSX.Element
     }
 
     if (message.role === 'user') {
-        return <article>{content}</article>;
+        return <article className="user-message">{content}</article>;
     } else {
         return (
             <tag of="render-markdown">
@@ -27,7 +27,6 @@ export function MessageItems(props: { messages: ModelMessage[] }): JSX.Element {
 
     return <>{items}</>;
 }
-
 console.log(MessageItem({ message: { role: 'user', content: 'Bonjour' } }));
 console.log(MessageItem({ message: { role: 'bot', content: 'Bonjour, que puis-je faire pour vous ?' } }));
 console.log(
@@ -36,7 +35,7 @@ console.log(
     })
 );
 
-export function ChatView(props: { conversationId: string }): JSX.Element {
+export function ChatView(props: { conversationId: string; messages?: ModelMessage[] }): JSX.Element {
     return (
         <>
             {'<!DOCTYPE html>'}
@@ -68,6 +67,7 @@ export function ChatView(props: { conversationId: string }): JSX.Element {
                                 Posez vos questions ci-dessous et recevez des réponses instantanément. Utilisez le Markdown pour formater vos messages si besoin.</script>
                             <script type="text/markdown">Commencez dès maintenant à interagir avec le chatbot! Chaque réponse sera affichée au format Markdown ici.</script>
                         </tag>
+                        {props.messages && props.messages.length > 0 && <MessageItems messages={props.messages} />}
                     </div>
 
                     <form>
