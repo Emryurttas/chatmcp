@@ -23,4 +23,10 @@ router.post(
     chatController.sendPrompt.bind(chatController)
 );
 
+router.get(
+    '/chat/query/:id',
+    validateParams(paramsSchema),
+    chatController.query.bind(chatController)
+);
+
 export default router;
