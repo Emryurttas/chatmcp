@@ -58,6 +58,8 @@ export function ChatView(props: { conversationId: string; messages?: ModelMessag
                     <script src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/render-markdown.js" type="module"></script>
 
                     <script src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/htmx.js"></script>
+
+                    <script src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/sse.js"></script>
                 </head>
                 <body>
                     <div id="chat" hx-ext="render-markdown" hx-swap="beforeend">
