@@ -59,16 +59,25 @@ export class ChatController {
         res.setHeader('Connection', 'keep-alive');
         res.flushHeaders?.();
 
-        const stream = chatInstance.fetchAnswerStream();
+        try {
+            const stream = chatInstance.fetchAnswerStream();
 
-        for await (const token of stream) {
-            const formatted = token.replace(/\n/g, 'RENDER-MD-LF');
-            res.write(`event: token\ndata: ${formatted}\n\n`);
+            for await (const token of stream) {
+                const formatted = token.replace(/\n/g, 'RENDER-MD-LF');
+                res.write(`event: token\ndata: ${formatted}\n\n`);
+            }
+
+            res.write(`event: close\ndata: \n\n`);
+        } catch (error) {
+            const message = `RENDER-MD-ERROR ${String(error)}`;
+            res.write(`event: token\ndata: ${message}\n\n`);
+
+            res.write(`event: close\ndata: \n\n`);
+        } finally {
+            res.end();
         }
-
-        res.write(`event: close\ndata: \n\n`);
-        res.end();
     }
+
 }
 
 
