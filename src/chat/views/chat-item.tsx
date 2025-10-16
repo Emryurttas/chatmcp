@@ -13,7 +13,9 @@ export function ChatItemView({ prompt, id }: ChatItemProps) {
                 hx-trigger="load"
                 hx-target="this"
                 hx-swap="innerHTML"
-                hx-on="afterSwap: this.removeAttribute('aria-busy')"
+                hx-on--before-request="this.setAttribute('aria-busy', 'true')"
+                hx-on--after-request="this.removeAttribute('aria-busy')"
+                hx-on--error="this.removeAttribute('aria-busy')"
             ></div>
         </article>
     );
