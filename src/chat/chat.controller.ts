@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { ChatModel } from './chat.model';
 import { ChatView } from './views/chat';
 import { ChatItemView } from './views/chat-item';
+import {ChatItemStreamView} from "./views/chat-item-stream";
 
 export class ChatController {
     public chat(req: Request, res: Response): void {
@@ -26,10 +27,18 @@ export class ChatController {
 
     public sendPrompt(req: Request, res: Response): void {
         const prompt = req.body.prompt;
+        const streamingMode = req.body.streamingMode === 'true';
         const conversationId = req.params.id as string;
         const chatInstance = new ChatModel(conversationId);
         chatInstance.addPrompt(prompt);
-        const chatItemHtml = ChatItemView({ prompt, id: conversationId });
+
+        let chatItemHtml;
+        if (streamingMode) {
+            chatItemHtml = ChatItemStreamView({ prompt, id: conversationId });
+        } else {
+            chatItemHtml = ChatItemView({ prompt, id: conversationId });
+        }
+
         res.send(chatItemHtml);
     }
 
