@@ -18,7 +18,15 @@ export function MessageItem({ message }: { message: ModelMessage }): JSX.Element
         );
     }
 }
+export function MessageItems(props: { messages: ModelMessage[] }): JSX.Element {
+    const items: JSX.Element[] = [];
 
+    for (const message of props.messages) {
+        items.push(MessageItem({ message }));
+    }
+
+    return <>{items}</>;
+}
 
 console.log(MessageItem({ message: { role: 'user', content: 'Bonjour' } }));
 console.log(MessageItem({ message: { role: 'bot', content: 'Bonjour, que puis-je faire pour vous ?' } }));
