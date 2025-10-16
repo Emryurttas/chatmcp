@@ -23,7 +23,7 @@ export function ChatView(props: { conversationId: string }): JSX.Element {
                     <script src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/htmx.js"></script>
                 </head>
                 <body>
-                    <div id="chat">
+                    <div id="chat" hx-ext="render-markdown" hx-swap="beforeend">
                         <p>Bienvenue sur ChatMCP</p>
                     </div>
 
