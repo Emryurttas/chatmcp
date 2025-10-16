@@ -24,7 +24,12 @@ export function ChatView(props: { conversationId: string }): JSX.Element {
                 </head>
                 <body>
                     <div id="chat" hx-ext="render-markdown" hx-swap="beforeend">
-                        <p>Bienvenue sur ChatMCP</p>
+                        <tag of="render-markdown">
+                            <script type="text/markdown"># Bienvenue sur ChatMCP
+
+                                Posez vos questions ci-dessous et recevez des réponses instantanément. Utilisez le Markdown pour formater vos messages si besoin.</script>
+                            <script type="text/markdown">Commencez dès maintenant à interagir avec le chatbot ! Chaque réponse sera affichée au format Markdown ici.</script>
+                        </tag>
                     </div>
 
                     <form>
