@@ -30,6 +30,10 @@ export class ChatModel {
     get chatId(): string {
         return this._chatId;
     }
+    get messages(): ModelMessage[] {
+        const msgs = ChatModel.repository.find(this._chatId);
+        return msgs ?? [];
+    }
 
     addPrompt(prompt: string): void {
         ChatModel.repository.addMessages(this._chatId, [{ role: 'user', content: prompt }]);
