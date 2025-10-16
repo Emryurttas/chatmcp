@@ -29,4 +29,10 @@ router.get(
     chatController.query.bind(chatController)
 );
 
+router.get(
+    '/chat/stream/:id',
+    validateParams(paramsSchema),
+    chatController.stream.bind(chatController)
+);
+
 export default router;
