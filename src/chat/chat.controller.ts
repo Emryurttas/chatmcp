@@ -21,9 +21,10 @@ export class ChatController {
     }
 
     public async query(req: Request, res: Response): Promise<void> {
-        const conversationId = req.params.id;
+        const conversationId = req.params.id as string;
         const chatInstance = new ChatModel(conversationId);
-        const answer = await chatInstance.fetchAnswer();
+        let answer = await chatInstance.fetchAnswer();
+        answer = answer.replace(/\n/g, 'RENDER-MD-LF');
         res.send(answer);
     }
 }
