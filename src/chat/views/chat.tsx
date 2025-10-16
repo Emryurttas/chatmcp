@@ -83,7 +83,15 @@ export function ChatView(props: { conversationId: string; messages?: ModelMessag
                         placeholder="Votre message..."
                         required
                     ></textarea>
-                        <button type="submit" id="send">Envoyer</button>
+
+                    <p>
+                        <label>
+                            <input type="checkbox" name="streamingMode" />
+                            Mode streaming
+                        </label>
+                    </p>
+
+                    <button type="submit" id="send">Envoyer</button>
                     </form>
 
 
