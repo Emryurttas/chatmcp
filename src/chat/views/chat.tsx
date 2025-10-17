@@ -76,8 +76,6 @@ export function ChatView(props: { conversationId: string; messages?: ModelMessag
                         hx-post={`/chat/send/${props.conversationId}`}
                         hx-target="#chat"
                         hx-swap="beforeend"
-                        hx-trigger="keydown[enter]"
-                        hx-on-after-request="this.querySelector('#prompt').value = ''"
                     >
                     <textarea
                         id="prompt"

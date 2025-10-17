@@ -16,11 +16,11 @@ body, html {
 }
 
 #chat p {
-    color: black;
+    color: white;
     margin: 0;
 }
 .user-message {
-    color: black;
+    color: white;
     margin-top: 1em;
     padding: 0.5em;
 }
