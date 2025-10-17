@@ -1,5 +1,5 @@
 import { google } from '@ai-sdk/google';
-import { generateText, streamText, smoothStream, ToolSet, stepCountIs } from 'ai';
+import { generateText, streamText, smoothStream, ToolSet, stepCountIs, StepResult } from 'ai';
 import { Experimental_StdioMCPTransport } from "ai/mcp-stdio"
 import { ChatRepository } from './chat.repository';
 import { experimental_createMCPClient as createMCPClient } from 'ai';
@@ -43,7 +43,7 @@ export class ChatModel {
         ChatModel.repository.addMessages(this._chatId, [{ role: 'user', content: prompt }]);
     }
 
-    async createGenerationConfig() {
+    async createGenerationConfig(toolCallNotification: ( toolName : string ) => void) {
         const messages = ChatModel.repository.find(this._chatId);
 
         if (ChatModel._tools === null) {
@@ -60,6 +60,16 @@ export class ChatModel {
             model: MODEL_NAME,
             tools: ChatModel._tools,
             stopWhen: stepCountIs(10),
+            onStepFinish: (result: StepResult<ToolSet>): void => {
+                if (result.dynamicToolCalls) {
+                    for (const call of result.dynamicToolCalls) {
+                        if (call.toolName) {
+                            toolCallNotification(call.toolName);
+                        }
+                    }
+                }
+            },
+            
             messages: messages.map(m => {
                 const role: 'user' | 'assistant' = m.role === 'bot' ? 'assistant' : 'user';
                 return {
@@ -70,8 +80,8 @@ export class ChatModel {
         };
     }
     
-    async fetchAnswer(): Promise<string> {
-        const config = await this.createGenerationConfig();
+    async fetchAnswer(toolCallNotification: ( toolName : string ) => void): Promise<string> {
+        const config = await this.createGenerationConfig(toolCallNotification);
         const { text, response } = await generateText(config);
 
         if (response.messages) {
@@ -81,8 +91,8 @@ export class ChatModel {
     }
 
    
-    async *fetchAnswerStream(): AsyncGenerator<string> {
-        const config = await this.createGenerationConfig();
+    async *fetchAnswerStream(toolCallNotification: ( toolName : string ) => void): AsyncGenerator<string> {
+        const config = await this.createGenerationConfig(toolCallNotification);
 
         const result = streamText({
             ...config,
