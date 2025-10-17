@@ -43,19 +43,28 @@ export class ChatModel {
         ChatModel.repository.addMessages(this._chatId, [{ role: 'user', content: prompt }]);
     }
 
-    async createGenerationConfig(toolCallNotification: ( toolName : string ) => void) {
+    async createGenerationConfig(toolCallNotification: (toolName: string) => void) {
         const messages = ChatModel.repository.find(this._chatId);
 
         if (ChatModel._tools === null) {
-            const transport = new Experimental_StdioMCPTransport({
+            const timeTransport = new Experimental_StdioMCPTransport({
                 command: 'node',
                 args: ['/home/butinfo/mcp-servers/mcp-time/dist/server.js'],
             });
+            const timeClient = await createMCPClient({ transport: timeTransport });
+            const timeTools = await timeClient.tools();
+            const osmTransport = new Experimental_StdioMCPTransport({
+                command: '/home/butinfo/bin/uvx',
+                args: ['osm-mcp-server'],
+            });
+            const osmClient = await createMCPClient({ transport: osmTransport });
 
-            const client = await createMCPClient({ transport });
-            ChatModel._tools = await client.tools();
+            const osmTools = await osmClient.tools();
+            ChatModel._tools = {
+                ...timeTools,
+                ...osmTools
+            };
         }
-
         return {
             model: MODEL_NAME,
             tools: ChatModel._tools,
@@ -69,7 +78,7 @@ export class ChatModel {
                     }
                 }
             },
-            
+
             messages: messages.map(m => {
                 const role: 'user' | 'assistant' = m.role === 'bot' ? 'assistant' : 'user';
                 return {
