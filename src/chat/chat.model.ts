@@ -1,6 +1,9 @@
 import { google } from '@ai-sdk/google';
-import { generateText, streamText, smoothStream } from 'ai';
+import { generateText, streamText, smoothStream, ToolSet, stepCountIs } from 'ai';
+import { Experimental_StdioMCPTransport } from "ai/mcp-stdio"
 import { ChatRepository } from './chat.repository';
+import { experimental_createMCPClient as createMCPClient } from 'ai';
+
 
 const MODEL_NAME = google('gemini-2.0-flash');
 
@@ -14,6 +17,7 @@ export type ModelMessage = {
 export class ChatModel {
     private _chatId: string;
     private static repository = new ChatRepository<ModelMessage>();
+    private static _tools: ToolSet | null = null;
 
     constructor(chatId?: string) {
         if (chatId) {
@@ -39,11 +43,23 @@ export class ChatModel {
         ChatModel.repository.addMessages(this._chatId, [{ role: 'user', content: prompt }]);
     }
 
-    private createGenerationConfig() {
+    async createGenerationConfig() {
         const messages = ChatModel.repository.find(this._chatId);
+
+        if (ChatModel._tools === null) {
+            const transport = new Experimental_StdioMCPTransport({
+                command: 'node',
+                args: ['/home/butinfo/mcp-servers/mcp-time/dist/server.js'],
+            });
+
+            const client = await createMCPClient({ transport });
+            ChatModel._tools = await client.tools();
+        }
 
         return {
             model: MODEL_NAME,
+            tools: ChatModel._tools,
+            stopWhen: stepCountIs(10),
             messages: messages.map(m => {
                 const role: 'user' | 'assistant' = m.role === 'bot' ? 'assistant' : 'user';
                 return {
@@ -53,8 +69,9 @@ export class ChatModel {
             }),
         };
     }
+    
     async fetchAnswer(): Promise<string> {
-        const config = this.createGenerationConfig();
+        const config = await this.createGenerationConfig();
         const { text, response } = await generateText(config);
 
         if (response.messages) {
@@ -65,7 +82,7 @@ export class ChatModel {
 
    
     async *fetchAnswerStream(): AsyncGenerator<string> {
-        const config = this.createGenerationConfig();
+        const config = await this.createGenerationConfig();
 
         const result = streamText({
             ...config,
@@ -86,4 +103,6 @@ export class ChatModel {
             { role: 'bot', content: accumulated },
         ]);
     }
+
+    
 }
