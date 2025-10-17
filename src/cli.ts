@@ -25,14 +25,19 @@ async function main(config: { streaming: boolean }) {
 
         chat.addPrompt(userInput);
 
+        const toolNotifier = (toolName: string) => {
+            console.log(`${COLOR_ANSWER}\`\`\`[Outil appelé] ${toolName}\`\`\`${COLOR_DEFAULT}`);
+        };
+
         if (config.streaming) {
             process.stdout.write(`${COLOR_ANSWER}ChatBot: `);
-            for await (const chunk of chat.fetchAnswerStream()) {
+
+            for await (const chunk of chat.fetchAnswerStream(toolNotifier)) {
                 process.stdout.write(chunk);
             }
             console.log(COLOR_DEFAULT);
         } else {
-            const answer = await chat.fetchAnswer();
+            const answer = await chat.fetchAnswer(toolNotifier);
             console.log(`${COLOR_ANSWER}ChatBot: ${answer}${COLOR_DEFAULT}`);
         }
     }

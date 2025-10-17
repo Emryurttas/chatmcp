@@ -45,7 +45,16 @@ export class ChatController {
     public async query(req: Request, res: Response): Promise<void> {
         const conversationId = req.params.id as string;
         const chatInstance = new ChatModel(conversationId);
-        let answer = await chatInstance.fetchAnswer();
+
+        const notifications: string[] = [];
+
+        const toolNotifier = (toolName: string) => {
+            const notification = `\`\`\`[Outil appelé] ${toolName}\`\`\``;
+            notifications.push(notification);
+        };
+        
+        let answer = await chatInstance.fetchAnswer(toolNotifier);
+
         answer = answer.replace(/\n/g, 'RENDER-MD-LF');
         res.send(answer);
     }
@@ -59,8 +68,15 @@ export class ChatController {
         res.setHeader('Connection', 'keep-alive');
         res.flushHeaders?.();
 
+        const notifications: string[] = [];
+
+        const toolNotifier = (toolName: string) => {
+            const notification = `\`\`\`[Outil appelé] ${toolName}\`\`\``;
+            notifications.push(notification);
+            res.write(`event: token\ndata: ${notification}\n\n`);
+        };
         try {
-            const stream = chatInstance.fetchAnswerStream();
+            const stream = chatInstance.fetchAnswerStream(toolNotifier);
 
             for await (const token of stream) {
                 const formatted = token.replace(/\n/g, 'RENDER-MD-LF');
