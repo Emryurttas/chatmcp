@@ -7,6 +7,9 @@ class UserRepository {
     async findAll(): Promise<User[]> {
         return this.collection.find().toArray();
     }
+    async findByUserName(userName: string){
+        return this.collection.findOne({userName})
+    }
 }
 
 export const userRepository = new UserRepository;
