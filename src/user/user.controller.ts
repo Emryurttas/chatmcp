@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { UserView } from './views/user';
+import { loginForm } from './views/loginForm';
 import { userRepository } from './user.repository';
 
 export class UserController{
@@ -10,5 +11,10 @@ export class UserController{
 
         res.send(page);
     }
+    public loginForm(req: Request, res: Response): void{
+        const page = loginForm();
+        res.send(page);
+    }
+    
 }
 export const userController = new UserController();
