@@ -11,12 +11,12 @@ export function UserView({ users }: { users: User[] }): JSX.Element {
         <body>
           <h1>Utilisateurs</h1>
           <ul>
-            {users.map(u => `
+            {users.map(u => 
               <li>
                 <strong>${u.userName}</strong> (${u.email}) 
                 — id: ${idAsString(u._id)}
               </li>
-            `).join('')}
+            ).join('')}
           </ul>
         </body>
       </html>
