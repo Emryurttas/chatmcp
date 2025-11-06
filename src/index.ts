@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import { HomeView } from './views/home';
 import { ErrorPageView } from './views/error/error-page';
 import chatRouter from './chat/chat.router';
+import userRouter from './user/user.router';
 import {ErrorDialogView} from "./chat/views/error-dialog";
 
 const app = express();
@@ -19,6 +20,8 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/', chatRouter);
+app.use('/', userRouter);
+
 
 app.get('/time', (req: Request, res: Response) => {
     const now = new Date();
