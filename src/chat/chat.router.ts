@@ -3,8 +3,11 @@ import { chatController } from './chat.controller';
 import { z } from 'zod';
 import { validateBody } from '../utils/validator';
 import { validateParams } from '../utils/validateParams';
+import { connectionRequired } from '../user/user.middleware';
 
 const router = Router();
+
+router.use(connectionRequired);
 
 export const promptSchema = z.object({
     prompt: z.string().min(1, "Le prompt ne peut pas être vide"),
