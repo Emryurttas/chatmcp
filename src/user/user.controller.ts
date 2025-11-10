@@ -23,12 +23,20 @@ export class UserController{
         if (!user) {
             throw new Error("Utilisateur introuvable");
         }
-        
         const isPasswordValid = bcrypt.compare(password, user.hashedPassword);
         if (!isPasswordValid) {
             throw new Error("Mot de passe incorrect");
         }
-        res.send(`Bienvenue, ${user.userName} !`);
+
+        req.session.regenerate((err) => {
+            if (err) {
+                throw err;
+            }
+
+            req.session.user = user;
+
+            res.redirect('/');
+        });
     }
     
 }
