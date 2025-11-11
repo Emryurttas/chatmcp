@@ -3,6 +3,7 @@ import { UserView } from './views/user';
 import { loginForm } from './views/loginForm';
 import { userRepository } from './user.repository';
 import bcrypt from 'bcrypt';
+import { ObjectId } from 'bson';
 
 export class UserController{
     public async showUser(req: Request, res: Response): Promise<void> {
@@ -38,11 +39,21 @@ export class UserController{
             res.redirect('/');
         });
     }
-    
+
     public logout(req: Request, res: Response): void {
         req.session.destroy(() => {
             res.redirect('/');
         });
     }
+
+    public getUserFromSession(req: Request, res: Response) {
+        const user = req.session.user;
+        if (!user) {
+            throw new Error("Aucun utilisateur connecté");
+        }
+        user._id = new ObjectId(user._id);
+        return user;
+    }
+
 }
 export const userController = new UserController();
