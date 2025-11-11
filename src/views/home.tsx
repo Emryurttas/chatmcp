@@ -1,3 +1,5 @@
+import { NavBar } from "./navbar";
+
 export function HomeView(props: { title: string; user?: { userName: string } }): JSX.Element {
     return (
         <>
@@ -12,29 +14,30 @@ export function HomeView(props: { title: string; user?: { userName: string } }):
                     <script src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/htmx.js"></script>
                 </head>
                 <body>
-                    <h1>{props.title}</h1>
+                    <NavBar user={props.user} />
 
-                    {props.user && (
-                        <p>
-                            Bienvenue, {props.user.userName} — <a href="/user/logout">Se déconnecter</a>
-                        </p>
-                    )}
+                    <main style={{ padding: '1rem' }}>
 
-                    {!props.user && (
-                        <p>
-                            <a href="/user/login">Se connecter</a>
-                        </p>
-                    )}
+                        {props.user ? (
+                            <p>
+                                <a href="/user/logout">Se déconnecter</a>
+                            </p>
+                        ) : (
+                            <p>
+                                <a href="/user/login">Se connecter</a>
+                            </p>
+                        )}
 
-                    <a href="/chat">Chatbot</a>
+                        <a href="/chat">Chatbot</a>
 
-                    <button 
-                        id="heure-btn"
-                        hx-get="/time"
-                        hx-target="#heure-btn"
-                        hx-swap="outerHTML">
-                        Heure
-                    </button>
+                        <button 
+                            id="heure-btn"
+                            hx-get="/time"
+                            hx-target="#heure-btn"
+                            hx-swap="outerHTML">
+                            Heure
+                        </button>
+                    </main>
                 </body>
             </html>
         </>
