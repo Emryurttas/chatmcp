@@ -3,13 +3,15 @@ import { HomeView } from './views/home';
 import { ErrorPageView } from './views/error/error-page';
 import chatRouter from './chat/chat.router';
 import userRouter from './user/user.router';
-import {ErrorDialogView} from "./chat/views/error-dialog";
-import session from 'express-session'
+import { ErrorDialogView } from "./chat/views/error-dialog";
+import session from 'express-session';
+import { valkeyStore } from './services/valkey';
 
 const app = express();
 const port = process.env.PORT;
 
 app.use(session({
+    store: valkeyStore,
     secret: 'cc46091749e55f33fe4046b9c8855a13',
     saveUninitialized: false,
     resave: false
