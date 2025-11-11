@@ -14,9 +14,20 @@ export function HomeView(props: { title: string; user?: { userName: string } }):
                 <body>
                     <h1>{props.title}</h1>
 
-                    {props.user && <p>Bienvenue, {props.user.userName} !</p>}
+                    {props.user && (
+                        <p>
+                            Bienvenue, {props.user.userName} — <a href="/user/logout">Se déconnecter</a>
+                        </p>
+                    )}
+
+                    {!props.user && (
+                        <p>
+                            <a href="/user/login">Se connecter</a>
+                        </p>
+                    )}
 
                     <a href="/chat">Chatbot</a>
+
                     <button 
                         id="heure-btn"
                         hx-get="/time"
