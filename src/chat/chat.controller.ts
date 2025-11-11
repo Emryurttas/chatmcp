@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { ok } from 'assert';
 import { ChatModel } from './chat.model';
 import { ChatView } from './views/chat';
 import { ChatItemView } from './views/chat-item';
@@ -6,6 +7,7 @@ import { ChatItemStreamView } from "./views/chat-item-stream";
 
 export class ChatController {
     public chat(req: Request, res: Response): void {
+        ok(req.session.user);
         const conversationId = req.query.id as string | undefined;
         let chatInstance: ChatModel;
 
@@ -26,6 +28,7 @@ export class ChatController {
     }
 
     public sendPrompt(req: Request, res: Response): void {
+        ok(req.session.user);
         const prompt = req.body.prompt;
         const streamingMode = req.body.streamingMode === 'true';
         const conversationId = req.params.id as string;
@@ -43,6 +46,7 @@ export class ChatController {
     }
 
     public async query(req: Request, res: Response): Promise<void> {
+        ok(req.session.user);
         const conversationId = req.params.id as string;
         const chatInstance = new ChatModel(conversationId);
 
@@ -60,6 +64,7 @@ export class ChatController {
     }
 
     public async stream(req: Request, res: Response): Promise<void> {
+        ok(req.session.user);
         const conversationId = req.params.id as string;
         const chatInstance = new ChatModel(conversationId);
 
