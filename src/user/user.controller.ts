@@ -39,5 +39,10 @@ export class UserController{
         });
     }
     
+    public logout(req: Request, res: Response): void {
+        req.session.destroy(() => {
+            res.redirect('/');
+        });
+    }
 }
 export const userController = new UserController();

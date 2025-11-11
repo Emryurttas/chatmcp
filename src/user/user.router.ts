@@ -20,4 +20,6 @@ userRouter.post(
   userController.login.bind(userController)
 );
 
+userRouter.get('/user/logout', userController.logout.bind(userController));
+
 export default userRouter;
