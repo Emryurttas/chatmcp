@@ -22,7 +22,13 @@ app.use(express.json());
 app.use(express.static('public'));
 
 app.get('/', (req: Request, res: Response) => {
-    const page = HomeView( {title:"Acceuil"} );
+    const homeViewProps: { title: string; user?: { userName: string } } = {
+        title: "Accueil"
+    };
+    if (req.session.user) {
+        homeViewProps.user = { userName: req.session.user.userName };
+    }
+    const page = HomeView(homeViewProps);
     res.send(page);
 });
 

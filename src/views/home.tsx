@@ -1,4 +1,4 @@
-export function HomeView(props: { title: string }): JSX.Element {
+export function HomeView(props: { title: string; user?: { userName: string } }): JSX.Element {
     return (
         <>
             {'<!DOCTYPE html>'}
@@ -13,6 +13,9 @@ export function HomeView(props: { title: string }): JSX.Element {
                 </head>
                 <body>
                     <h1>{props.title}</h1>
+
+                    {props.user && <p>Bienvenue, {props.user.userName} !</p>}
+
                     <a href="/chat">Chatbot</a>
                     <button 
                         id="heure-btn"
