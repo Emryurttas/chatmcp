@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { ChatModel } from './chat.model';
 import { ChatView } from './views/chat';
 import { ChatItemView } from './views/chat-item';
-import {ChatItemStreamView} from "./views/chat-item-stream";
+import { ChatItemStreamView } from "./views/chat-item-stream";
 
 export class ChatController {
     public chat(req: Request, res: Response): void {
@@ -93,8 +93,6 @@ export class ChatController {
             res.end();
         }
     }
-
 }
-
 
 export const chatController = new ChatController();
