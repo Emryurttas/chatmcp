@@ -23,7 +23,7 @@ export class UserController{
         if (!user) {
             throw new Error("Utilisateur introuvable");
         }
-        const isPasswordValid = bcrypt.compare(password, user.hashedPassword);
+        const isPasswordValid = await bcrypt.compare(password, user.hashedPassword);
         if (!isPasswordValid) {
             throw new Error("Mot de passe incorrect");
         }
