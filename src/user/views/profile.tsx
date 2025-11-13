@@ -39,8 +39,15 @@ export function ProfilePage(props: PropsWithChildren<{ user: User }>): JSX.Eleme
 export function EmailDisplay(props: { email: string }): JSX.Element {
     const { email } = props;
     return (
-        <span>
-            {email} <i class="fa-solid fa-pen-to-square"></i>
+        <span id="email-display">
+            {email} 
+            <i 
+                class="fas fa-edit" 
+                style={{ cursor: 'pointer', color: '#22d54fff' }}
+                hx-get="/user/editEmail"
+                hx-target="#email-display"
+                hx-swap="outerHTML"
+            ></i>
         </span>
     );
 }
