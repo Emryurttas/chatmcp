@@ -4,6 +4,8 @@ import { loginForm } from './views/loginForm';
 import { userRepository } from './user.repository';
 import bcrypt from 'bcrypt';
 import { ObjectId } from 'bson';
+import { User } from './user';
+import { ProfilePage } from './views/profile';
 
 export class UserController{
     public async showUser(req: Request, res: Response): Promise<void> {
@@ -46,13 +48,20 @@ export class UserController{
         });
     }
 
-    public getUserFromSession(req: Request, res: Response) {
+    public getUserFromSession(req: Request, res: Response): User {
         const user = req.session.user;
         if (!user) {
             throw new Error("Aucun utilisateur connecté");
         }
         user._id = new ObjectId(user._id);
         return user;
+    }
+
+    public profile(req: Request, res: Response): void {
+        const user = this.getUserFromSession(req, res);
+
+        const page = ProfilePage({ user });
+        res.send(page);
     }
 
 }
