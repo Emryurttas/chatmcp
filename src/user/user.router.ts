@@ -22,4 +22,6 @@ userRouter.post(
 
 userRouter.get('/user/logout', userController.logout.bind(userController));
 
+userRouter.get('/user/profile', userController.profile.bind(userController))
+
 export default userRouter;
