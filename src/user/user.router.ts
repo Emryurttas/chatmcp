@@ -22,6 +22,9 @@ userRouter.post(
 
 userRouter.get('/user/logout', userController.logout.bind(userController));
 
-userRouter.get('/user/profile', userController.profile.bind(userController))
+userRouter.get('/user/profile', userController.profile.bind(userController));
+
+userRouter.get('/user/editEmail', userController.editEmail.bind(userController));
+
 
 export default userRouter;
