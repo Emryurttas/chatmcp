@@ -11,23 +11,14 @@ export function HomeView(props: { title: string; user?: { userName: string } }):
                     <title>{props.title}</title>
                     <link rel="stylesheet" href="/css/pico.min.css" />
                     <link rel="icon" href="/images/bot.png" />
+                    <link href="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/css/fontawesome.min.css" rel="stylesheet" type="text/css" />
+                    <link href="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/css/solid.min.css" rel="stylesheet" type="text/css" />
                     <script src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/htmx.js"></script>
                 </head>
                 <body>
                     <NavBar user={props.user} />
 
-                    <main style={{ padding: '1rem' }}>
-
-                        {props.user ? (
-                            <p>
-                                <a href="/user/logout">Se déconnecter</a>
-                            </p>
-                        ) : (
-                            <p>
-                                <a href="/user/login">Se connecter</a>
-                            </p>
-                        )}
-
+                    <main>
                         <a href="/chat">Chatbot</a>
 
                         <button 

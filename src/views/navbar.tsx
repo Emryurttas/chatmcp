@@ -1,4 +1,5 @@
-import { PropsWithChildren } from "@kitajs/html";
+import { PropsWithChildren } from "@kitajs/html"; 
+import { UserDropdown } from "./user-dropdown";
 
 export function NavBar(props: PropsWithChildren<{ user?: { userName: string } }>): JSX.Element {
     return (
@@ -6,15 +7,15 @@ export function NavBar(props: PropsWithChildren<{ user?: { userName: string } }>
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            padding: '0.5rem 1rem',
+            padding: '0.5em 2%',
             backgroundColor: '#2c3e50',
             color: 'white'
         }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5em' }}>
                 <img 
                     src="/images/bot.png" 
                     alt="Chatbot Logo" 
-                    style={{ width: '40px', height: '40px' }} 
+                    style={{ height: '2em', width: 'auto' }} 
                 />
                 <strong>ChatMCP</strong>
             </div>
@@ -22,16 +23,14 @@ export function NavBar(props: PropsWithChildren<{ user?: { userName: string } }>
             <ul style={{
                 listStyle: 'none',
                 display: 'flex',
-                gap: '1rem',
+                gap: '1em',
                 margin: 0,
                 padding: 0,
                 alignItems: 'center'
             }}>
-                <li><a href="/" style={{ color: 'white' }}>Accueil</a></li>
-                {props.children}
-                {props.user && (
-                    <li>Bienvenue, {props.user.userName}</li>
-                )}
+                <li>
+                    <UserDropdown user={props.user} />
+                </li>
             </ul>
         </nav>
     );
