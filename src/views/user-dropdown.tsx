@@ -25,7 +25,7 @@ export function UserDropdown(props: PropsWithChildren<{ user?: { userName: strin
                 boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
             }}>
                 <li>
-                    <a href="/#">
+                    <a href="/user/profile">
                         Profil
                     </a>
                 </li>

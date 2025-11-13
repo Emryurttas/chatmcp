@@ -27,6 +27,7 @@ export function MessageItems(props: { messages: ModelMessage[] }): JSX.Element {
 
     return <>{items}</>;
 }
+/*
 console.log(MessageItem({ message: { role: 'user', content: 'Bonjour' } }));
 console.log(MessageItem({ message: { role: 'bot', content: 'Bonjour, que puis-je faire pour vous ?' } }));
 console.log(
@@ -34,7 +35,7 @@ console.log(
         message: { role: 'bot', content: [{ type: 'text', text: 'Votre code doit aussi gérer ce type de message.' }] },
     })
 );
-
+*/
 export function ChatView(props: { conversationId: string; messages?: ModelMessage[] }): JSX.Element {
     return (
         <>

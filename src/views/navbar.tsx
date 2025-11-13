@@ -17,7 +17,7 @@ export function NavBar(props: PropsWithChildren<{ user?: { userName: string } }>
                     alt="Chatbot Logo" 
                     style={{ height: '2em', width: 'auto' }} 
                 />
-                <strong>ChatMCP</strong>
+                <a href="/"><strong>ChatMCP</strong></a>
             </div>
 
             <ul style={{
