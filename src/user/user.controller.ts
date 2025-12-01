@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt';
 import { ObjectId } from 'bson';
 import { User } from './user';
 import { ProfilePage } from './views/profile';
+import { EmailEdit } from './views/emailEdit';
 
 export class UserController{
     public async showUser(req: Request, res: Response): Promise<void> {
@@ -62,6 +63,11 @@ export class UserController{
 
         const page = ProfilePage({ user });
         res.send(page);
+    }
+    public editEmail(req: Request, res: Response): void {
+        const user = this.getUserFromSession(req, res);
+        const component = EmailEdit({ email: user.email });
+        res.send(component);
     }
 
 }
