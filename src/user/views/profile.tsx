@@ -39,7 +39,7 @@ export function ProfilePage(props: PropsWithChildren<{ user: User }>): JSX.Eleme
 export function EmailDisplay(props: { email: string }): JSX.Element {
     const { email } = props;
     return (
-        <span id="email-display">
+        <div id="email-display">
             {email} 
             <i 
                 class="fas fa-edit" 
@@ -48,6 +48,6 @@ export function EmailDisplay(props: { email: string }): JSX.Element {
                 hx-target="#email-display"
                 hx-swap="outerHTML"
             ></i>
-        </span>
+        </div>
     );
 }
