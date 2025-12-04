@@ -10,6 +10,11 @@ const loginSchema = z.object({
   password: z.string().min(1, "Mot de passe requis"),
 });
 
+const updateEmailSchema = z.object({
+  email: z.string().email("Email invalide")
+});
+
+
 userRouter.get('/user/all', userController.showUser.bind(userController));
 
 userRouter.get('/user/login', userController.loginForm.bind(userController));
@@ -26,5 +31,12 @@ userRouter.get('/user/profile', userController.profile.bind(userController));
 
 userRouter.get('/user/editEmail', userController.editEmail.bind(userController));
 
+userRouter.get('/user/displayEmail', userController.displayEmail.bind(userController));
+
+userRouter.post(
+  '/user/updateEmail',
+  validateBody(updateEmailSchema),
+  userController.updateEmail.bind(userController)
+);
 
 export default userRouter;
