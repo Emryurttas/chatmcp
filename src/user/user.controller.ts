@@ -5,7 +5,7 @@ import { userRepository } from './user.repository';
 import bcrypt from 'bcrypt';
 import { ObjectId } from 'bson';
 import { User } from './user';
-import { ProfilePage } from './views/profile';
+import { EmailDisplay, ProfilePage } from './views/profile';
 import { EmailEdit } from './views/emailEdit';
 
 export class UserController{
@@ -64,11 +64,49 @@ export class UserController{
         const page = ProfilePage({ user });
         res.send(page);
     }
+
     public editEmail(req: Request, res: Response): void {
         const user = this.getUserFromSession(req, res);
         const component = EmailEdit({ email: user.email });
         res.send(component);
     }
 
+    public displayEmail(req: Request, res: Response): void {
+        const user = this.getUserFromSession(req, res);
+        const component = EmailDisplay({ email: user.email });
+        res.send(component);
+    }
+
+    public async updateEmail(req: Request, res: Response): Promise<void> {
+        try {
+            const user = this.getUserFromSession(req, res);
+            const { email } = req.body;
+
+            if (!email || typeof email !== 'string') {
+                const component = EmailDisplay({ email: user.email, message: "Email invalide" });
+                res.status(400).send(component);
+                return;
+            }
+
+            if (!user._id) {
+                const component = EmailDisplay({ email: user.email, message: "ID utilisateur manquant" });
+                res.status(400).send(component);
+                return;
+            }
+
+            await userRepository.updateEmail(user._id.toString(), email);
+
+            user.email = email;
+            if (req.session.user) req.session.user.email = email;
+
+            const component = EmailDisplay({ email });
+            res.send(component);
+
+        } catch (err) {
+            const user = req.session.user;
+            const component = EmailDisplay({ email: user?.email || "", message: "Erreur lors de la mise à jour." });
+            res.status(500).send(component);
+        }
+    }
 }
 export const userController = new UserController();
