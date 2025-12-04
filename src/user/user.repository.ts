@@ -5,6 +5,13 @@ import { ObjectId } from "bson";
 class UserRepository {
     private readonly collection = mongodb.collection<User>('users');
 
+    constructor() {
+        this.collection.createIndex(
+            { userName: 1 },
+            { unique: true }
+        )
+    }
+
     async findAll(): Promise<User[]> {
         return this.collection.find().toArray();
     }
