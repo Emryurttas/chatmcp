@@ -1,5 +1,15 @@
-// type extrait du SDK AI (fichier ai/dist/index.d.ts)
+import { ModelMessage } from "ai";
+import { ObjectId } from "bson";
 
+export interface Chat{
+    _id?: ObjectId,
+    userId: ObjectId,
+    title: string
+    creationDate: Date,
+    lastModificationDate: Date,
+    messages: ModelMessage[];
+}
+// type extrait du SDK AI (fichier ai/dist/index.d.ts)
 type GenerationConfig = CallSettings & Prompt & {
     /**
      *  The language model to use.
