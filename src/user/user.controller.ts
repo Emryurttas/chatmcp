@@ -49,6 +49,7 @@ export class UserController{
         });
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public getUserFromSession(req: Request, res: Response): User {
         const user = req.session.user;
         if (!user) {
@@ -102,6 +103,7 @@ export class UserController{
             const component = EmailDisplay({ email });
             res.send(component);
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (err) {
             const user = req.session.user;
             const component = EmailDisplay({ email: user?.email || "", message: "Erreur lors de la mise à jour." });
