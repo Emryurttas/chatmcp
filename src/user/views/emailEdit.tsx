@@ -4,20 +4,15 @@ interface EmailEditProps {
 
 export function EmailEdit({ email }: EmailEditProps): JSX.Element {
     return (
-        <div
-            style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                width: "100%",
-            }}
+        <form
+            hx-post="/user/updateEmail"
+            hx-target="#email-display"
+            hx-swap="innerHTML"
+            style={{ display: "flex", alignItems: "center", gap: "0.5rem", width: "100%" }}
         >
             <label
-                style={{
-                    minWidth: "160px",
-                    fontWeight: "bold",
-                    fontSize: "1rem",
-                }}
+                for="email"
+                style={{ minWidth: "120px", fontWeight: "bold" }}
             >
                 Adresse email :
             </label>
@@ -27,11 +22,8 @@ export function EmailEdit({ email }: EmailEditProps): JSX.Element {
                 id="email"
                 name="email"
                 required
-                style={{
-                    maxWidth: "600px",
-                    border: "1px solid #ccc",
-                    borderRadius: "4px",
-                }}
+                value={email}  // input non contrôlé
+                style={{ maxWidth: "600px", border: "1px solid #ccc", borderRadius: "4px" }}
             />
 
             <button
@@ -40,9 +32,10 @@ export function EmailEdit({ email }: EmailEditProps): JSX.Element {
                     backgroundColor: "#007bff",
                     color: "white",
                     border: "none",
-                    padding: "0.6rem 0.8rem",
+                    padding: "0.4rem 0.5rem",
                     cursor: "pointer",
-                    width: "auto",
+                    maxWidth: "120px",
+                    width: "100%"
                 }}
             >
                 Envoyer
@@ -50,16 +43,21 @@ export function EmailEdit({ email }: EmailEditProps): JSX.Element {
 
             <button
                 type="button"
+                hx-get="/user/displayEmail"
+                hx-target="#email-display"
+                hx-swap="innerHTML"
                 style={{
                     backgroundColor: "#ccc",
                     border: "none",
-                    padding: "0.6rem 0.8rem",
+                    padding: "0.4rem 0.5rem",
                     cursor: "pointer",
-                    whiteSpace: "nowrap",
+                    maxWidth: "120px",
+                    width: "100%"
                 }}
             >
                 Annuler
             </button>
-        </div>
+        </form>
     );
 }
+
