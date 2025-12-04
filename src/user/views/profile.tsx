@@ -25,28 +25,32 @@ export function ProfilePage(props: PropsWithChildren<{ user: User }>): JSX.Eleme
                             <li>{user.userName}</li>
                         </ul>
                         <strong>Courriel :</strong>
-                        <ul>
-                            <li><EmailDisplay email={user.email} /></li>
-                        </ul> 
+                        <div id="email-display">
+                            <EmailDisplay email={user.email} />
+                        </div>
                     </div>
-
                 </main>
             </body>
         </html>
     );
 }
 
-export function EmailDisplay(props: { email: string }): JSX.Element {
-    const { email } = props;
+
+export function EmailDisplay({ email, message }: { email: string; message?: string }): JSX.Element {
     return (
-        <div id="email-display">
-            {email} 
-            <i 
-                class="fas fa-edit" 
-                style={{ cursor: 'pointer', color: '#22d54fff' }}
+        <div>
+            {email}
+            {message && (
+                <div style={{ color: "red", fontSize: "0.9rem", marginTop: "0.3rem" }}>
+                    {message}
+                </div>
+            )}
+            <i
+                class="fas fa-edit"
+                style={{ cursor: 'pointer', color: '#22d54fff', marginLeft: "0.5rem" }}
                 hx-get="/user/editEmail"
                 hx-target="#email-display"
-                hx-swap="outerHTML"
+                hx-swap="innerHTML"
             ></i>
         </div>
     );
