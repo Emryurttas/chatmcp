@@ -47,7 +47,18 @@ class ChatRepository {
     }
 
     async create(userId: string): Promise<string> {
-        throw Error('Code à écrire');
+        const now = new Date();
+
+        const chat: Chat = {
+            userId: new ObjectId(userId),
+            title: "Nouvelle conversation",
+            creationDate: now,
+            lastModificationDate: now,
+            messages: []
+        };
+
+        const result = await this.collection.insertOne(chat);
+        return result.insertedId.toHexString();
     }
 
     async exists(chatId: string): Promise<boolean> {
