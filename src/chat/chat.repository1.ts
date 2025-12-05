@@ -68,7 +68,14 @@ class ChatRepository {
     }
 
     async find(chatId: string): Promise<Chat> {
-        throw Error('Code à écrire');
+        const id = new ObjectId(chatId);
+        const chat = await this.collection.findOne({ _id: id });
+
+        if (!chat) {
+            throw new Error(`chatId invalide : ${chatId}`);
+        }
+
+        return chat;
     }
 
     async addMessages(chatId: string, messages: ModelMessage[]): Promise<void> {
