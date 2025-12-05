@@ -1,0 +1,25 @@
+{
+  "_id": {
+    "$oid": "61b8c1f8b0f4d1b6b2f2a2c0"
+  },
+  "userId": {
+    "$oid": "61b8c1f8b0f4d1b6b2f2a2c1"
+  },
+  "title": "Test conversation",
+  "creationDate": {
+    "$date": "2024-12-01T10:30:00.000Z"
+  },
+  "lastModificationDate": {
+    "$date": "2024-12-01T11:00:00.000Z"
+  },
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hello, this is a test"
+    },
+    {
+      "role": "bot",
+      "content": "Hello! I’m a test assistant"
+    }
+  ]
+}
