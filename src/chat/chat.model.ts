@@ -1,9 +1,8 @@
 import { google } from '@ai-sdk/google';
 import { generateText, streamText, smoothStream, ToolSet, stepCountIs, StepResult } from 'ai';
-import { Experimental_StdioMCPTransport } from "ai/mcp-stdio"
+import { Experimental_StdioMCPTransport } from "ai/mcp-stdio";
 import { ChatRepository1 } from './chat.repository1';
 import { experimental_createMCPClient as createMCPClient } from 'ai';
-
 
 const MODEL_NAME = google('gemini-2.0-flash');
 
@@ -19,21 +18,27 @@ export class ChatModel {
     private static repository = new ChatRepository1<ModelMessage>();
     private static _tools: ToolSet | null = null;
 
-    constructor(chatId?: string) {
+    static async create(userId: string, chatId?: string): Promise<ChatModel> {
         if (chatId) {
             const exists = ChatModel.repository.find(chatId);
             if (!exists) {
-                throw new Error(`${chatId} "introuvable."`);
+                throw new Error(`${chatId} introuvable.`);
             }
-            this._chatId = chatId;
+            return new ChatModel(chatId);
         } else {
-            this._chatId = ChatModel.repository.create([]);
+            const newChatId = ChatModel.repository.create([]);
+            return new ChatModel(newChatId);
         }
+    }
+
+    private constructor(chatId: string) {
+        this._chatId = chatId;
     }
 
     get chatId(): string {
         return this._chatId;
     }
+    
     get messages(): ModelMessage[] {
         const msgs = ChatModel.repository.find(this._chatId);
         return msgs ?? [];
@@ -88,8 +93,8 @@ export class ChatModel {
             }),
         };
     }
-    
-    async fetchAnswer(toolCallNotification: ( toolName : string ) => void): Promise<string> {
+
+    async fetchAnswer(toolCallNotification: (toolName: string) => void): Promise<string> {
         const config = await this.createGenerationConfig(toolCallNotification);
         const { text, response } = await generateText(config);
 
@@ -99,8 +104,7 @@ export class ChatModel {
         return text;
     }
 
-   
-    async *fetchAnswerStream(toolCallNotification: ( toolName : string ) => void): AsyncGenerator<string> {
+    async *fetchAnswerStream(toolCallNotification: (toolName: string) => void): AsyncGenerator<string> {
         const config = await this.createGenerationConfig(toolCallNotification);
 
         const result = streamText({
@@ -122,6 +126,4 @@ export class ChatModel {
             { role: 'bot', content: accumulated },
         ]);
     }
-
-    
 }
