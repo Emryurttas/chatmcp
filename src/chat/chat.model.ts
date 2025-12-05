@@ -1,7 +1,7 @@
 import { google } from '@ai-sdk/google';
 import { generateText, streamText, smoothStream, ToolSet, stepCountIs, StepResult } from 'ai';
 import { Experimental_StdioMCPTransport } from "ai/mcp-stdio";
-import { ChatRepository1 } from './chat.repository1';
+import { chatRepository } from './chat.repository1';
 import { experimental_createMCPClient as createMCPClient } from 'ai';
 
 const MODEL_NAME = google('gemini-2.0-flash');
@@ -9,24 +9,23 @@ const MODEL_NAME = google('gemini-2.0-flash');
 export type Segment = { type: 'text'; text: string };
 
 export type ModelMessage = {
-    role: 'user' | 'bot';
+    role: 'user' | 'assistant';
     content: string | Segment[];
 };
 
 export class ChatModel {
     private _chatId: string;
-    private static repository = new ChatRepository1<ModelMessage>();
     private static _tools: ToolSet | null = null;
 
     static async create(userId: string, chatId?: string): Promise<ChatModel> {
         if (chatId) {
-            const exists = ChatModel.repository.find(chatId);
+            const exists = await chatRepository.find(chatId);
             if (!exists) {
                 throw new Error(`${chatId} introuvable.`);
             }
             return new ChatModel(chatId);
         } else {
-            const newChatId = ChatModel.repository.create([]);
+            const newChatId = await chatRepository.create(userId);
             return new ChatModel(newChatId);
         }
     }
@@ -38,18 +37,27 @@ export class ChatModel {
     get chatId(): string {
         return this._chatId;
     }
-    
-    get messages(): ModelMessage[] {
-        const msgs = ChatModel.repository.find(this._chatId);
-        return msgs ?? [];
+
+    async messages(): Promise<ModelMessage[]> {
+        const chat = await chatRepository.find(this._chatId);
+        return (chat.messages ?? [])
+            .filter(m => m.role === 'user' || m.role === 'assistant')
+            .map(m => ({
+                role: m.role as 'user' | 'assistant',
+                content: Array.isArray(m.content)
+                    ? m.content
+                        .filter(part => 'text' in part)
+                        .map(part => ({ type: 'text', text: (part as any).text }))
+                    : m.content ?? ''
+            }));
     }
 
-    addPrompt(prompt: string): void {
-        ChatModel.repository.addMessages(this._chatId, [{ role: 'user', content: prompt }]);
+    async addPrompt(prompt: string): Promise<void> {
+        await chatRepository.addMessages(this._chatId, [{ role: 'user', content: prompt }]);
     }
 
     async createGenerationConfig(toolCallNotification: (toolName: string) => void) {
-        const messages = ChatModel.repository.find(this._chatId);
+        const messages = await this.messages();
 
         if (ChatModel._tools === null) {
             const timeTransport = new Experimental_StdioMCPTransport({
@@ -70,6 +78,7 @@ export class ChatModel {
                 ...osmTools
             };
         }
+
         return {
             model: MODEL_NAME,
             tools: ChatModel._tools,
@@ -83,14 +92,7 @@ export class ChatModel {
                     }
                 }
             },
-
-            messages: messages.map(m => {
-                const role: 'user' | 'assistant' = m.role === 'bot' ? 'assistant' : 'user';
-                return {
-                    role,
-                    content: m.content,
-                };
-            }),
+            messages: messages
         };
     }
 
@@ -99,7 +101,7 @@ export class ChatModel {
         const { text, response } = await generateText(config);
 
         if (response.messages) {
-            ChatModel.repository.addMessages(this._chatId, [{ role: 'bot', content: text }]);
+            await chatRepository.addMessages(this._chatId, [{ role: 'assistant', content: text }]);
         }
         return text;
     }
@@ -122,8 +124,8 @@ export class ChatModel {
             yield textPart;
         }
 
-        ChatModel.repository.addMessages(this._chatId, [
-            { role: 'bot', content: accumulated },
+        await chatRepository.addMessages(this._chatId, [
+            { role: 'assistant', content: accumulated },
         ]);
     }
 }

@@ -12,7 +12,10 @@ const COLOR_DEFAULT = '\x1b[0m';
 
 async function main(config: { streaming: boolean }) {
 
-    const chat = new ChatModel();
+    const userId = "cli-user"; 
+
+    const chat = await ChatModel.create(userId);
+
     console.log(`${COLOR_ANSWER}Bonjour ! Tapez votre question (vide pour quitter).${COLOR_DEFAULT}`);
 
     while (true) {
@@ -23,7 +26,7 @@ async function main(config: { streaming: boolean }) {
             break;
         }
 
-        chat.addPrompt(userInput);
+        await chat.addPrompt(userInput);
 
         const toolNotifier = (toolName: string) => {
             console.log(`${COLOR_ANSWER}\`\`\`[Outil appelé] ${toolName}\`\`\`${COLOR_DEFAULT}`);

@@ -6,18 +6,19 @@ import { ChatItemView } from './views/chat-item';
 import { ChatItemStreamView } from "./views/chat-item-stream";
 
 export class ChatController {
-    public chat(req: Request, res: Response): void {
+    public async chat(req: Request, res: Response): Promise<void> {
         ok(req.session.user);
+        const userId = (req.session.user as any).id;
         const conversationId = req.query.id as string | undefined;
         let chatInstance: ChatModel;
 
         if (conversationId) {
-            chatInstance = new ChatModel(conversationId);
+            chatInstance = await ChatModel.create(userId, conversationId);
         } else {
-            chatInstance = new ChatModel();
+            chatInstance = await ChatModel.create(userId);
         }
 
-        const messages = chatInstance.messages ?? [];
+        const messages = await chatInstance.messages();
 
         const page = ChatView({
             conversationId: chatInstance.chatId,
@@ -27,13 +28,17 @@ export class ChatController {
         res.send(page);
     }
 
-    public sendPrompt(req: Request, res: Response): void {
+    public async sendPrompt(req: Request, res: Response): Promise<void> {
         ok(req.session.user);
+        const userId = (req.session.user as any).id;
         const prompt = req.body.prompt;
         const streamingMode = req.body.streamingMode === 'true';
         const conversationId = req.params.id as string;
-        const chatInstance = new ChatModel(conversationId);
-        chatInstance.addPrompt(prompt);
+        let chatInstance: ChatModel;
+
+        chatInstance = await ChatModel.create(userId, conversationId);
+
+        await chatInstance.addPrompt(prompt);
 
         let chatItemHtml;
         if (streamingMode) {
@@ -47,8 +52,9 @@ export class ChatController {
 
     public async query(req: Request, res: Response): Promise<void> {
         ok(req.session.user);
+        const userId = (req.session.user as any).id;
         const conversationId = req.params.id as string;
-        const chatInstance = new ChatModel(conversationId);
+        const chatInstance = await ChatModel.create(userId, conversationId);
 
         const notifications: string[] = [];
 
@@ -65,8 +71,9 @@ export class ChatController {
 
     public async stream(req: Request, res: Response): Promise<void> {
         ok(req.session.user);
+        const userId = (req.session.user as any).id;
         const conversationId = req.params.id as string;
-        const chatInstance = new ChatModel(conversationId);
+        const chatInstance = await ChatModel.create(userId, conversationId);
 
         res.setHeader('Content-Type', 'text/event-stream');
         res.setHeader('Cache-Control', 'no-cache');
@@ -92,7 +99,7 @@ export class ChatController {
         } catch (error) {
             const message = `RENDER-MD-ERROR ${String(error)}`;
             res.write(`event: token\ndata: ${message}\n\n`);
-
+            
             res.write(`event: close\ndata: \n\n`);
         } finally {
             res.end();
