@@ -18,7 +18,7 @@
       "content": "Hello, this is a test"
     },
     {
-      "role": "bot",
+      "role": "assistant",
       "content": "Hello! I’m a test assistant"
     }
   ]

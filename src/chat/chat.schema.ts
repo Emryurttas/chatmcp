@@ -38,8 +38,8 @@ const chatSchema = {
                     required: ["role", "content"],
                     properties: {
                         role: {
-                            enum: ["user", "bot"],
-                            description: "'role' must be one of: user or bot"
+                            enum: ["user", "assistant"],
+                            description: "'role' must be one of: user or assistant"
                         },
                         content: {
                             description: "'content' is required (type intentionally not specified)"
