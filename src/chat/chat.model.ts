@@ -1,7 +1,7 @@
 import { google } from '@ai-sdk/google';
 import { generateText, streamText, smoothStream, ToolSet, stepCountIs, StepResult } from 'ai';
 import { Experimental_StdioMCPTransport } from "ai/mcp-stdio";
-import { chatRepository } from './chat.repository1';
+import { chatRepository } from './chat.repository';
 import { experimental_createMCPClient as createMCPClient } from 'ai';
 
 const MODEL_NAME = google('gemini-2.0-flash');

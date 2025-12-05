@@ -3,41 +3,6 @@ import { mongodb } from "../services/mongo";
 import { Chat } from "./chat";
 import { ModelMessage } from "ai";
 
-export class ChatRepository1<Message> {
-    // stockage des conversations, associées à un identifiant
-    private chats = new Map<string, Message[]>
-
-    // ajoute une conversation au repository et retourne son identifiant
-    create(chat: Message[]): string {
-        const id = new ObjectId().toHexString();
-        this.chats.set(id, chat);
-        return id;
-    }
-    // retourne vrai si une conversation existe, faux sinon
-    exists(chatId: string): boolean {
-        return this.chats.has(chatId);
-    }
-    
-    // retourne la conversation associée à l'identifiant
-    // lance une erreur si la conversation n'existe pas
-    find(chatId: string): Message[] {
-        const chat = this.chats.get(chatId);
-        if (!chat) {
-            throw new Error(`chatId invalide : ${chatId}`);
-        }
-        return chat;
-    }
-
-    // ajoute des messages à la conversation associée à l'identifiant
-    // lance une erreur si la conversation n'existe pas
-    addMessages(chatId: string, messages: Message[]): void {
-        const chat = this.chats.get(chatId);
-        if (!chat) {
-            throw new Error(`chatId invalide : ${chatId}`);
-        }
-        chat.push(...messages);
-    }
-}
 
 class ChatRepository {
     private readonly collection = mongodb.collection<Chat>('chats');
