@@ -79,7 +79,22 @@ class ChatRepository {
     }
 
     async addMessages(chatId: string, messages: ModelMessage[]): Promise<void> {
-        throw Error('Code à écrire');
+        if (messages.length === 0) return;
+
+        const id = new ObjectId(chatId);
+        const now = new Date();
+
+        const result = await this.collection.updateOne(
+            { _id: id },
+            {
+                $push: { messages: { $each: messages } },
+                $set: { lastModificationDate: now }
+            }
+        );
+
+        if (result.matchedCount === 0) {
+            throw new Error(`chatId invalide : ${chatId}`);
+        }
     }
 }
 
