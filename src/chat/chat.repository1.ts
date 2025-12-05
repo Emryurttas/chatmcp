@@ -62,7 +62,9 @@ class ChatRepository {
     }
 
     async exists(chatId: string): Promise<boolean> {
-        throw Error('Code à écrire');
+        const id = new ObjectId(chatId);
+        const count = await this.collection.countDocuments({ _id: id }, { limit: 1 });
+        return count === 1;
     }
 
     async find(chatId: string): Promise<Chat> {
