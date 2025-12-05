@@ -1,7 +1,7 @@
 import { google } from '@ai-sdk/google';
 import { generateText, streamText, smoothStream, ToolSet, stepCountIs, StepResult } from 'ai';
 import { Experimental_StdioMCPTransport } from "ai/mcp-stdio"
-import { ChatRepository } from './chat.repository';
+import { ChatRepository1 } from './chat.repository1';
 import { experimental_createMCPClient as createMCPClient } from 'ai';
 
 
@@ -16,7 +16,7 @@ export type ModelMessage = {
 
 export class ChatModel {
     private _chatId: string;
-    private static repository = new ChatRepository<ModelMessage>();
+    private static repository = new ChatRepository1<ModelMessage>();
     private static _tools: ToolSet | null = null;
 
     constructor(chatId?: string) {
