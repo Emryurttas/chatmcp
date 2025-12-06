@@ -1,8 +1,13 @@
 import { PropsWithChildren } from "@kitajs/html";
 import { UserDropdown } from "./user-dropdown";
 import { ChatDropdown } from "../chat/views/chat-dropdown";
+import { ChatTitleDisplay } from "../chat/views/chat-title";
 
-export function NavBar(props: PropsWithChildren<{ user?: { userName: string } }>): JSX.Element {
+export function NavBar(props: PropsWithChildren<{ 
+    user?: { userName: string }; 
+    chatTitle?: string;
+    chatId?: string;
+}>): JSX.Element {
     return (
         <nav style={{
             display: 'flex',
@@ -19,6 +24,9 @@ export function NavBar(props: PropsWithChildren<{ user?: { userName: string } }>
                     style={{ height: '2em', width: 'auto' }} 
                 />
                 <a href="/"><strong>ChatMCP</strong></a>
+                {props.chatTitle && props.chatId && (
+                    <ChatTitleDisplay title={props.chatTitle} chatId={props.chatId} />
+                )}
             </div>
 
             <ul style={{
