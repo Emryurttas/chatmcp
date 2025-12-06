@@ -1,5 +1,6 @@
-import { PropsWithChildren } from "@kitajs/html"; 
+import { PropsWithChildren } from "@kitajs/html";
 import { UserDropdown } from "./user-dropdown";
+import { ChatDropdown } from "../chat/views/chat-dropdown";
 
 export function NavBar(props: PropsWithChildren<{ user?: { userName: string } }>): JSX.Element {
     return (
@@ -28,6 +29,9 @@ export function NavBar(props: PropsWithChildren<{ user?: { userName: string } }>
                 padding: 0,
                 alignItems: 'center'
             }}>
+                <li>
+                    <ChatDropdown user={props.user} />
+                </li>
                 <li>
                     <UserDropdown user={props.user} />
                 </li>
