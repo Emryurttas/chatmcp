@@ -61,6 +61,15 @@ class ChatRepository {
             throw new Error(`chatId invalide : ${chatId}`);
         }
     }
+    async findLastByUser(userId: string): Promise<Chat | null> {
+        const chats = await this.collection
+            .find({ userId: new ObjectId(userId) })
+            .sort({ lastModificationDate: -1 })
+            .limit(1)
+            .toArray();
+
+        return chats.length > 0 ? chats[0] : null;
+    }
 }
 
 export const chatRepository = new ChatRepository();

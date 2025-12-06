@@ -4,6 +4,7 @@ import { ChatModel } from './chat.model';
 import { ChatView } from './views/chat';
 import { ChatItemView } from './views/chat-item';
 import { ChatItemStreamView } from "./views/chat-item-stream";
+import { chatRepository } from './chat.repository';
 
 export class ChatController {
     public async chat(req: Request, res: Response): Promise<void> {
@@ -12,8 +13,9 @@ export class ChatController {
         const conversationId = req.query.id as string | undefined;
         let chatInstance: ChatModel;
 
-        if (conversationId) {
-            chatInstance = await ChatModel.create(userId, conversationId);
+        const lastChat = await chatRepository.findLastByUser(userId);
+        if (lastChat && lastChat._id) {
+            chatInstance = await ChatModel.create(userId, lastChat._id.toHexString());
         } else {
             chatInstance = await ChatModel.create(userId);
         }
