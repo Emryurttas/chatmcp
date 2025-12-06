@@ -39,4 +39,7 @@ router.get(
     chatController.stream.bind(chatController)
 );
 
+router.get('/chat/new', connectionRequired, chatController.newChat.bind(chatController));
+
+
 export default router;

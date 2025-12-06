@@ -105,6 +105,19 @@ export class ChatController {
             res.end();
         }
     }
+    public async newChat(req: Request, res: Response): Promise<void> {
+        ok(req.session.user);
+        const userId = (req.session.user as any).id;
+
+        const chatInstance = await ChatModel.create(userId);
+
+        const page = ChatView({
+            conversationId: chatInstance.chatId,
+            messages: [],
+        });
+
+        res.send(page);
+    }
 }
 
 export const chatController = new ChatController();
