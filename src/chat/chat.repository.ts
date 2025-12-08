@@ -100,6 +100,25 @@ class ChatRepository {
         const key = `chat:${chat._id.toHexString()}`;
         await valkey.set(key, JSON.stringify(chat));
     }
+
+    async readFromCache(chatId: string): Promise<Chat | undefined> {
+        const key = `chat:${chatId}`;
+        const cached = await valkey.get(key);
+
+        if (!cached) {
+            return undefined;
+        }
+
+        const chat: Chat = JSON.parse(cached, (k, v) => {
+            if (k === "creationDate" || k === "lastModificationDate") {
+                return new Date(v);
+            }
+            return v;
+        });
+
+        console.log(`Utilisation des données mises en cache pour le chatId : ${chatId}`);
+        return chat;
+    }
 }
 
 export const chatRepository = new ChatRepository();
