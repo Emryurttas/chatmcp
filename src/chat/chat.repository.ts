@@ -2,6 +2,7 @@ import { ObjectId } from "bson";
 import { mongodb } from "../services/mongo";
 import { Chat } from "./chat";
 import { ModelMessage } from "ai";
+import { valkey } from "../services/valkey";
 
 
 class ChatRepository {
@@ -78,6 +79,15 @@ class ChatRepository {
             { _id },
             { $set: { title } }
         );
+    }
+
+    async writeToCache(chat: Chat): Promise<void> {
+        if (!chat._id) {
+            throw new Error("Impossible de mettre en cache un chat sans id");
+        }
+
+        const key = `chat:${chat._id.toHexString()}`;
+        await valkey.set(key, JSON.stringify(chat));
     }
 }
 
