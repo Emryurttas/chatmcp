@@ -38,13 +38,14 @@ class ChatRepository {
     }
 
     async find(chatId: string): Promise<Chat> {
+        const cachedChat = await this.readFromCache(chatId);
+        if (cachedChat) return cachedChat;
+
         const id = new ObjectId(chatId);
         const chat = await this.collection.findOne({ _id: id });
+        if (!chat) throw new Error(`chatId invalide : ${chatId}`);
 
-        if (!chat) {
-            throw new Error(`chatId invalide : ${chatId}`);
-        }
-
+        await this.writeToCache(chat);
         return chat;
     }
 
@@ -77,7 +78,13 @@ class ChatRepository {
             .limit(1)
             .toArray();
 
-        return chats.length > 0 ? chats[0] : null;
+        if (chats.length === 0) return null;
+
+        const cachedChat = await this.readFromCache(chats[0]._id!.toHexString());
+        if (cachedChat) return cachedChat;
+
+        await this.writeToCache(chats[0]);
+        return chats[0];
     }
 
     async updateTitle(id: string | ObjectId, title: string): Promise<void> {
