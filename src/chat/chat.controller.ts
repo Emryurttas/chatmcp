@@ -7,6 +7,8 @@ import { ChatView } from './views/chat';
 import { ChatItemView } from './views/chat-item';
 import { ChatItemStreamView } from "./views/chat-item-stream";
 import { chatRepository } from './chat.repository';
+import { TitleEdit } from './views/titleEdit';
+import { ChatTitleDisplay } from './views/chat-title';
 
 export class ChatController {
     public async chat(req: Request, res: Response): Promise<void> {
@@ -125,6 +127,22 @@ export class ChatController {
         });
 
         res.send(page);
+    }
+
+    public async editTitle(req: Request, res: Response): Promise<void> {
+        const chatId = req.params.id;
+        const chat = await chatRepository.find(chatId);
+
+        const component = TitleEdit({ title: chat.title, chatId });
+        res.send(component);
+    }
+
+    public async displayTitle(req: Request, res: Response): Promise<void> {
+        const chatId = req.params.id;
+        const chat = await chatRepository.find(chatId);
+
+        const component = ChatTitleDisplay({ title: chat.title, chatId });
+        res.send(component);
     }
 }
 
