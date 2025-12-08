@@ -41,5 +41,19 @@ router.get(
 
 router.get('/chat/new', connectionRequired, chatController.newChat.bind(chatController));
 
+router.get('/chat/editTitle/:id', 
+    connectionRequired, 
+    validateParams(paramsSchema),
+     chatController.editTitle.bind(chatController));
+
+router.get('/chat/displayTitle/:id',
+     connectionRequired,
+      validateParams(paramsSchema),
+       chatController.displayTitle.bind(chatController));
+
+router.post('/chat/updateTitle/:id',
+     connectionRequired,
+      validateParams(paramsSchema),
+       chatController.updateTitle.bind(chatController));
 
 export default router;
