@@ -4,7 +4,6 @@ import { Chat } from "./chat";
 import { ModelMessage } from "ai";
 import { valkey } from "../services/valkey";
 
-
 class ChatRepository {
     private readonly collection = mongodb.collection<Chat>('chats');
 
@@ -24,7 +23,12 @@ class ChatRepository {
         };
 
         const result = await this.collection.insertOne(chat);
-        return result.insertedId.toHexString();
+        const chatId = result.insertedId.toHexString();
+
+        chat._id = result.insertedId;
+        await this.writeToCache(chat);
+
+        return chatId;
     }
 
     async exists(chatId: string): Promise<boolean> {
@@ -61,7 +65,11 @@ class ChatRepository {
         if (result.matchedCount === 0) {
             throw new Error(`chatId invalide : ${chatId}`);
         }
+
+        const chat = await this.find(chatId);
+        await this.writeToCache(chat);
     }
+
     async findLastByUser(userId: string): Promise<Chat | null> {
         const chats = await this.collection
             .find({ userId: new ObjectId(userId) })
@@ -72,13 +80,16 @@ class ChatRepository {
         return chats.length > 0 ? chats[0] : null;
     }
 
-
     async updateTitle(id: string | ObjectId, title: string): Promise<void> {
         const _id = typeof id === "string" ? new ObjectId(id) : id;
+
         await this.collection.updateOne(
             { _id },
             { $set: { title } }
         );
+
+        const chat = await this.find(_id.toHexString());
+        await this.writeToCache(chat);
     }
 
     async writeToCache(chat: Chat): Promise<void> {
