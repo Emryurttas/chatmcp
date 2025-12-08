@@ -70,6 +70,15 @@ class ChatRepository {
 
         return chats.length > 0 ? chats[0] : null;
     }
+
+
+    async updateTitle(id: string | ObjectId, title: string): Promise<void> {
+        const _id = typeof id === "string" ? new ObjectId(id) : id;
+        await this.collection.updateOne(
+            { _id },
+            { $set: { title } }
+        );
+    }
 }
 
 export const chatRepository = new ChatRepository();
