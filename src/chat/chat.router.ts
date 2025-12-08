@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { validateBody } from '../utils/validator';
 import { validateParams } from '../utils/validateParams';
 import { connectionRequired } from '../user/user.middleware';
+import { isChatOwner } from './chat.middleware';
 
 const router = Router();
 
@@ -16,11 +17,13 @@ export const paramsSchema = z.object({
 });
 
 router.get('/chat', connectionRequired, chatController.chat.bind(chatController));
+router.get('/chat/new', connectionRequired, chatController.newChat.bind(chatController));
 
 router.post(
     '/chat/send/:id',
     connectionRequired,
     validateParams(paramsSchema),
+    isChatOwner,
     validateBody(promptSchema),
     chatController.sendPrompt.bind(chatController)
 );
@@ -29,6 +32,7 @@ router.get(
     '/chat/query/:id',
     connectionRequired,
     validateParams(paramsSchema),
+    isChatOwner,
     chatController.query.bind(chatController)
 );
 
@@ -36,24 +40,32 @@ router.get(
     '/chat/stream/:id',
     connectionRequired,
     validateParams(paramsSchema),
+    isChatOwner,
     chatController.stream.bind(chatController)
 );
 
-router.get('/chat/new', connectionRequired, chatController.newChat.bind(chatController));
-
-router.get('/chat/editTitle/:id', 
-    connectionRequired, 
+router.get(
+    '/chat/editTitle/:id',
+    connectionRequired,
     validateParams(paramsSchema),
-     chatController.editTitle.bind(chatController));
+    isChatOwner,
+    chatController.editTitle.bind(chatController)
+);
 
-router.get('/chat/displayTitle/:id',
-     connectionRequired,
-      validateParams(paramsSchema),
-       chatController.displayTitle.bind(chatController));
+router.get(
+    '/chat/displayTitle/:id',
+    connectionRequired,
+    validateParams(paramsSchema),
+    isChatOwner,
+    chatController.displayTitle.bind(chatController)
+);
 
-router.post('/chat/updateTitle/:id',
-     connectionRequired,
-      validateParams(paramsSchema),
-       chatController.updateTitle.bind(chatController));
+router.post(
+    '/chat/updateTitle/:id',
+    connectionRequired,
+    validateParams(paramsSchema),
+    isChatOwner,
+    chatController.updateTitle.bind(chatController)
+);
 
 export default router;
