@@ -4,7 +4,7 @@ import { Experimental_StdioMCPTransport } from "ai/mcp-stdio";
 import { chatRepository } from './chat.repository';
 import { experimental_createMCPClient as createMCPClient } from 'ai';
 
-const MODEL_NAME = google('gemini-2.0-flash');
+const MODEL_NAME = google('models/gemini-2.5-flash');
 
 export type Segment = { type: 'text'; text: string };
 
@@ -15,6 +15,7 @@ export type ModelMessage = {
 
 export class ChatModel {
     private _chatId: string;
+    private _title: string;
     private static _tools: ToolSet | null = null;
 
     static async create(userId: string, chatId?: string): Promise<ChatModel> {
@@ -23,19 +24,25 @@ export class ChatModel {
             if (!exists) {
                 throw new Error(`${chatId} introuvable.`);
             }
-            return new ChatModel(chatId);
+            return new ChatModel(chatId, exists.title);
         } else {
             const newChatId = await chatRepository.create(userId);
-            return new ChatModel(newChatId);
+            const chat = await chatRepository.find(newChatId);
+            return new ChatModel(newChatId, chat?.title || "Nouvelle conversation");
         }
     }
 
-    private constructor(chatId: string) {
+    private constructor(chatId: string, title: string) {
         this._chatId = chatId;
+        this._title = title;
     }
 
     get chatId(): string {
         return this._chatId;
+    }
+
+    get title(): string {
+        return this._title;
     }
 
     async messages(): Promise<ModelMessage[]> {
@@ -47,6 +54,7 @@ export class ChatModel {
                 content: Array.isArray(m.content)
                     ? m.content
                         .filter(part => 'text' in part)
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         .map(part => ({ type: 'text', text: (part as any).text }))
                     : m.content ?? ''
             }));

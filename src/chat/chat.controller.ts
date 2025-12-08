@@ -1,3 +1,5 @@
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 import { ok } from 'assert';
 import { ChatModel } from './chat.model';
@@ -9,8 +11,8 @@ import { chatRepository } from './chat.repository';
 export class ChatController {
     public async chat(req: Request, res: Response): Promise<void> {
         ok(req.session.user);
-        const userId = (req.session.user as any).id;
-        const conversationId = req.query.id as string | undefined;
+        const user = req.session.user as any;
+        const userId = user.id;
         let chatInstance: ChatModel;
 
         const lastChat = await chatRepository.findLastByUser(userId);
@@ -25,6 +27,7 @@ export class ChatController {
         const page = ChatView({
             conversationId: chatInstance.chatId,
             messages,
+            user,
         });
 
         res.send(page);
@@ -109,13 +112,16 @@ export class ChatController {
     }
     public async newChat(req: Request, res: Response): Promise<void> {
         ok(req.session.user);
-        const userId = (req.session.user as any).id;
+        const user = req.session.user as any;
+        const userId = user.id;
 
         const chatInstance = await ChatModel.create(userId);
 
         const page = ChatView({
             conversationId: chatInstance.chatId,
             messages: [],
+            chatTitle: chatInstance.title || "Nouvelle conversation",
+            user,
         });
 
         res.send(page);

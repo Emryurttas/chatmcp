@@ -1,3 +1,5 @@
+import { User } from '../../user/user';
+import { NavBar } from '../../views/navbar';
 import { ModelMessage } from '../chat.model';
 
 export function MessageItem({ message }: { message: ModelMessage }): JSX.Element {
@@ -9,7 +11,7 @@ export function MessageItem({ message }: { message: ModelMessage }): JSX.Element
     }
 
     if (message.role === 'user') {
-        return <article className="user-message">{content}</article>;
+        return <article class="user-message">{content}</article>;
     } else {
         return (
             <tag of="render-markdown">
@@ -18,25 +20,14 @@ export function MessageItem({ message }: { message: ModelMessage }): JSX.Element
         );
     }
 }
+
 export function MessageItems(props: { messages: ModelMessage[] }): JSX.Element {
-    const items: JSX.Element[] = [];
-
-    for (const message of props.messages) {
-        items.push(MessageItem({ message }));
-    }
-
-    return <>{items}</>;
+    return <>{props.messages.map(m => <MessageItem message={m} />)}</>;
 }
-/*
-console.log(MessageItem({ message: { role: 'user', content: 'Bonjour' } }));
-console.log(MessageItem({ message: { role: 'bot', content: 'Bonjour, que puis-je faire pour vous ?' } }));
-console.log(
-    MessageItem({
-        message: { role: 'bot', content: [{ type: 'text', text: 'Votre code doit aussi gérer ce type de message.' }] },
-    })
-);
-*/
-export function ChatView(props: { conversationId: string; messages?: ModelMessage[] }): JSX.Element {
+
+export function ChatView(props: { conversationId: string; messages?: ModelMessage[]; chatTitle?: string; user?: User; }): JSX.Element {
+    const displayUser = props.user?.userName ? props.user : { userName: 'Invité' };
+
     return (
         <>
             {'<!DOCTYPE html>'}
@@ -46,8 +37,8 @@ export function ChatView(props: { conversationId: string; messages?: ModelMessag
                     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                     <title>Chatbot</title>
 
-                    <link rel="stylesheet" href="/css/chat.css" />
                     <link rel="stylesheet" href="/css/pico.min.css" />
+                    <link rel="stylesheet" href="/css/chat.css" />
                     <link rel="icon" href="/images/bot.png" />
                     <link rel="stylesheet" href="/css/error-dialog.css" />
 
@@ -57,20 +48,30 @@ export function ChatView(props: { conversationId: string; messages?: ModelMessag
                     <link href="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/css/default-light.css"
                           media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)" rel="stylesheet"/>
                     <script src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/render-markdown.js" type="module"></script>
-
                     <script src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/htmx.js"></script>
-
                     <script src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/sse.js"></script>
+                    <link href="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/css/solid.min.css" rel="stylesheet" type="text/css" />
+                    <link href="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/css/fontawesome.min.css" rel="stylesheet" type="text/css" />
                 </head>
                 <body>
+                    {NavBar({ 
+                        user: displayUser, 
+                        chatTitle: props.chatTitle, 
+                        chatId: props.conversationId 
+                    })}
+
                     <div id="chat" hx-ext="render-markdown" hx-swap="beforeend">
                         <tag of="render-markdown">
-                            <script type="text/markdown"># Bienvenue sur ChatMCP
-
-                                Posez vos questions ci-dessous et recevez des réponses instantanément. Utilisez le Markdown pour formater vos messages si besoin.</script>
-                            <script type="text/markdown">Commencez dès maintenant à interagir avec le chatbot! Chaque réponse sera affichée au format Markdown ici.</script>
+                            <script type="text/markdown">
+                                # Bienvenue sur ChatMCP
+                                Posez vos questions ci-dessous et recevez des réponses instantanément.
+                                Utilisez le Markdown pour formater vos messages si besoin.
+                            </script>
+                            <script type="text/markdown">
+                                Commencez dès maintenant à interagir avec le chatbot! Chaque réponse sera affichée au format Markdown ici.
+                            </script>
                         </tag>
-                        {props.messages && props.messages.length > 0 && <MessageItems messages={props.messages} />}
+                        {props.messages && <MessageItems messages={props.messages} />}
                     </div>
 
                     <form
@@ -78,27 +79,24 @@ export function ChatView(props: { conversationId: string; messages?: ModelMessag
                         hx-target="#chat"
                         hx-swap="beforeend"
                     >
-                    <textarea
-                        id="prompt"
-                        name="prompt"
-                        placeholder="Votre message..."
-                        required
-                    ></textarea>
+                        <textarea
+                            id="prompt"
+                            name="prompt"
+                            placeholder="Votre message..."
+                            required
+                        ></textarea>
 
-                    <p>
-                        <label>
-                            <input type="checkbox" name="streamingMode" />
-                            Mode streaming
-                        </label>
-                    </p>
+                        <p>
+                            <label>
+                                <input type="checkbox" name="streamingMode" />
+                                Mode streaming
+                            </label>
+                        </p>
 
-                    <button type="submit" id="send">Envoyer</button>
+                        <button type="submit" id="send">Envoyer</button>
                     </form>
 
-
-
                     <script type="module" src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/autosize-textarea.js"></script>
-
 
                     <div id="conversation-id">
                         ID: {props.conversationId}
