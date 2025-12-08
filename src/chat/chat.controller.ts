@@ -144,6 +144,26 @@ export class ChatController {
         const component = ChatTitleDisplay({ title: chat.title, chatId });
         res.send(component);
     }
+    
+    public async updateTitle(req: Request, res: Response): Promise<void> {
+        const chatId = req.params.id;
+        const { title } = req.body;
+
+        if (!title || typeof title !== "string" || title.trim().length === 0) {
+            const chat = await chatRepository.find(chatId);
+            const component = ChatTitleDisplay({
+                title: chat.title,
+                chatId,
+            });
+            res.status(400).send(component);
+            return;
+        }
+
+        await chatRepository.updateTitle(chatId, title);
+
+        const component = ChatTitleDisplay({ title, chatId });
+        res.send(component);
+    }
 }
 
 export const chatController = new ChatController();
