@@ -13,17 +13,18 @@ export function NavBar(props: PropsWithChildren<{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            padding: '0.5em 2%',
+            padding: '0.5em 3%',
             backgroundColor: '#2c3e50',
             color: 'white'
         }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5em' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1em' }}>
                 <img 
                     src="/images/bot.png" 
                     alt="Chatbot Logo" 
                     style={{ height: '2em', width: 'auto' }} 
                 />
-                <a href="/"><strong>ChatMCP</strong></a>
+                <a href="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>ChatMCP</a>
+
                 {props.chatTitle && props.chatId && (
                     <ChatTitleDisplay title={props.chatTitle} chatId={props.chatId} />
                 )}

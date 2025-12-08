@@ -22,7 +22,7 @@ export function EmailEdit({ email }: EmailEditProps): JSX.Element {
                 id="email"
                 name="email"
                 required
-                value={email}  // input non contrôlé
+                value={email}
                 style={{ maxWidth: "600px", border: "1px solid #ccc", borderRadius: "4px" }}
             />
 

@@ -8,7 +8,7 @@ export function ChatDropdown(props: PropsWithChildren<{ user?: { userName: strin
     return (
         <details class="dropdown" style={{ display: 'inline-block', position: 'relative' }}>
             <summary>
-                <i class="fas fa-comments"></i> Conversations
+                <i class="fa-solid fa-comment"></i> Conversations
             </summary>
             <ul style={{
                 position: 'absolute',

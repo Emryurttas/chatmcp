@@ -1,7 +1,6 @@
 body, html {
     height: 100%;
     margin: 0;
-    background-color: #686464;
     display: flex;
     flex-direction: column;
 }
@@ -47,6 +46,6 @@ form button {
 #conversation-id {
     margin-top: 5px;
     font-size: 0.9em;
-    color: black;
+    color: white;
     text-align: right;
 }
