@@ -1,0 +1,36 @@
+.email-edit-form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.email-edit-label {
+    min-width: 120px;
+    font-weight: bold;
+}
+
+.email-edit-input {
+    max-width: 600px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.email-edit-submit {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.5rem;
+    cursor: pointer;
+    max-width: 120px;
+    width: 100%;
+}
+
+.email-edit-cancel {
+    background-color: #ccc;
+    border: none;
+    padding: 0.4rem 0.5rem;
+    cursor: pointer;
+    max-width: 120px;
+    width: 100%;
+}

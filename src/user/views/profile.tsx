@@ -11,6 +11,7 @@ export function ProfilePage(props: PropsWithChildren<{ user: User }>): JSX.Eleme
                 <meta charset="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                 <link rel="stylesheet" href="/css/pico.min.css" />
+                <link rel="stylesheet" href="/css/user.css" />
                 <link rel="icon" href="/images/bot.png" />
                 <link href="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/css/fontawesome.min.css" rel="stylesheet" type="text/css" />
                 <link href="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/css/solid.min.css" rel="stylesheet" type="text/css" />

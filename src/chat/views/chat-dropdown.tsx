@@ -10,21 +10,10 @@ export function ChatDropdown(props: PropsWithChildren<{ user?: { userName: strin
             <summary>
                 <i class="fa-solid fa-comment"></i> Conversations
             </summary>
-            <ul style={{
-                position: 'absolute',
-                top: '100%',
-                left: '60%',
-                transform: 'translateX(-50%)',
-                backgroundColor: '#2c3e50',
-                color: 'white',
-                borderRadius: '4px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
-                padding: '0.5em 0',
-                margin: 0,
-                listStyle: 'none',
-            }}>
+
+            <ul class="chat-dropdown-menu">
                 <li>
-                    <a href="/chat/new" style={{ display: 'block', padding: '0.5em 1em', color: 'white', textDecoration: 'none' }}>
+                    <a href="/chat/new" class="chat-dropdown-item">
                         Nouvelle conversation
                     </a>
                 </li>

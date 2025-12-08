@@ -8,12 +8,9 @@ export function EmailEdit({ email }: EmailEditProps): JSX.Element {
             hx-post="/user/updateEmail"
             hx-target="#email-display"
             hx-swap="innerHTML"
-            style={{ display: "flex", alignItems: "center", gap: "0.5rem", width: "100%" }}
+            class="email-edit-form"
         >
-            <label
-                for="email"
-                style={{ minWidth: "120px", fontWeight: "bold" }}
-            >
+            <label for="email" class="email-edit-label">
                 Adresse email :
             </label>
 
@@ -23,21 +20,10 @@ export function EmailEdit({ email }: EmailEditProps): JSX.Element {
                 name="email"
                 required
                 value={email}
-                style={{ maxWidth: "600px", border: "1px solid #ccc", borderRadius: "4px" }}
+                class="email-edit-input"
             />
 
-            <button
-                type="submit"
-                style={{
-                    backgroundColor: "#007bff",
-                    color: "white",
-                    border: "none",
-                    padding: "0.4rem 0.5rem",
-                    cursor: "pointer",
-                    maxWidth: "120px",
-                    width: "100%"
-                }}
-            >
+            <button type="submit" class="email-edit-submit">
                 Envoyer
             </button>
 
@@ -46,18 +32,10 @@ export function EmailEdit({ email }: EmailEditProps): JSX.Element {
                 hx-get="/user/displayEmail"
                 hx-target="#email-display"
                 hx-swap="innerHTML"
-                style={{
-                    backgroundColor: "#ccc",
-                    border: "none",
-                    padding: "0.4rem 0.5rem",
-                    cursor: "pointer",
-                    maxWidth: "120px",
-                    width: "100%"
-                }}
+                class="email-edit-cancel"
             >
                 Annuler
             </button>
         </form>
     );
 }
-

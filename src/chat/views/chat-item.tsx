@@ -5,7 +5,7 @@ export interface ChatItemProps {
 
 export function ChatItemView({ prompt, id }: ChatItemProps) {
     return (
-        <article className="chat-item">
+        <article class="chat-item">
             <p>{prompt}</p>
             <div
                 aria-busy="true"
