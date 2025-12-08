@@ -1,15 +1,15 @@
 import { PropsWithChildren } from "@kitajs/html";
 
-export function ChatTitleDisplay(
-    props: PropsWithChildren<{ title: string; chatId: string }>
-): JSX.Element {
+export function ChatTitleDisplay(props: PropsWithChildren<{ title: string; chatId: string }>): JSX.Element {
     return (
-        <div class="navbar-title">
+        <div id="title-display" class="chat-title-display">
             <span>{props.title}</span>
-
-            <a href={`/chat/edit/${props.chatId}`}>
-                <i class="fas fa-edit"></i>
-            </a>
+            <i
+                class="fas fa-edit"
+                hx-get={`/chat/editTitle/${props.chatId}`}
+                hx-target="#title-display"
+                hx-swap="innerHTML"
+            ></i>
         </div>
     );
 }
