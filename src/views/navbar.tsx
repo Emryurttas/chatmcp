@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "@kitajs/html";
-import { UserDropdown } from "./user-dropdown";
+import { UserDropdown } from "../user/views/user-dropdown";
 import { ChatDropdown } from "../chat/views/chat-dropdown";
 import { ChatTitleDisplay } from "../chat/views/chat-title";
 
