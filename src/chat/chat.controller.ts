@@ -1,5 +1,3 @@
-/* eslint-disable prefer-const */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 import { ok } from 'assert';
 import { ChatModel } from './chat.model';
@@ -9,13 +7,14 @@ import { ChatItemStreamView } from "./views/chat-item-stream";
 import { chatRepository } from './chat.repository';
 import { TitleEdit } from './views/titleEdit';
 import { ChatTitleDisplay } from './views/chat-title';
+import { idAsString } from '../utils/id-as-string';
 
 export class ChatController {
     private getUserId(req: Request): string {
         ok(req.session.user);
         const user = req.session.user;
         ok(user._id);
-        return user._id.toString();
+        return idAsString(user._id);
     }
 
     public async chat(req: Request, res: Response): Promise<void> {
@@ -26,7 +25,7 @@ export class ChatController {
         const lastChat = await chatRepository.findLastByUser(userId);
 
         if (lastChat && lastChat._id) {
-            chatInstance = await ChatModel.create(userId, lastChat._id.toHexString());
+            chatInstance = await ChatModel.create(userId, idAsString(lastChat._id));
         } else {
             chatInstance = await ChatModel.create(userId);
         }

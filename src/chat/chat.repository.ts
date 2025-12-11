@@ -3,6 +3,7 @@ import { mongodb } from "../services/mongo";
 import { Chat } from "./chat";
 import { ModelMessage } from "ai";
 import { valkey } from "../services/valkey";
+import { idAsString } from "../utils/id-as-string";
 
 class ChatRepository {
     private readonly collection = mongodb.collection<Chat>('chats');
@@ -23,7 +24,7 @@ class ChatRepository {
         };
 
         const result = await this.collection.insertOne(chat);
-        const chatId = result.insertedId.toHexString();
+        const chatId = idAsString(result.insertedId);
 
         chat._id = result.insertedId;
         await this.writeToCache(chat);
@@ -80,7 +81,7 @@ class ChatRepository {
 
         if (chats.length === 0) return null;
 
-        const cachedChat = await this.readFromCache(chats[0]._id!.toHexString());
+        const cachedChat = await this.readFromCache(idAsString(chats[0]._id!));
         if (cachedChat) return cachedChat;
 
         await this.writeToCache(chats[0]);
@@ -95,7 +96,7 @@ class ChatRepository {
             { $set: { title } }
         );
 
-        const chat = await this.find(_id.toHexString());
+        const chat = await this.find(idAsString(_id));
         await this.writeToCache(chat);
     }
 
@@ -104,7 +105,7 @@ class ChatRepository {
             throw new Error("Impossible de mettre en cache un chat sans id");
         }
 
-        const key = `chat:${chat._id.toHexString()}`;
+        const key = `chat:${idAsString(chat._id)}`;
         await valkey.set(key, JSON.stringify(chat));
     }
 

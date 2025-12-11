@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { chatRepository } from "./chat.repository";
-import { ObjectId } from "bson";
+import { idAsString } from "../utils/id-as-string";
 
 export async function isChatOwner(req: Request, res: Response, next: NextFunction) {
     const user = req.session?.user;
@@ -15,9 +15,10 @@ export async function isChatOwner(req: Request, res: Response, next: NextFunctio
 
     const chat = await chatRepository.find(chatId);
 
-    const userObjectId = user._id instanceof ObjectId ? user._id : new ObjectId(user._id);
+    const chatUserId = idAsString(chat.userId);
+    const sessionUserId = idAsString(user._id);
 
-    if (!chat.userId.equals(userObjectId)) {
+    if (chatUserId !== sessionUserId) {
         return res.status(403).send("Vous n'êtes pas autorisé à accéder à cette conversation.");
     }
 
