@@ -1,13 +1,13 @@
+import { ModelMessage } from 'ai';
 import { User } from '../../user/user';
 import { NavBar } from '../../views/navbar';
-import { ModelMessage } from '../chat.model';
 
 export function MessageItem({ message }: { message: ModelMessage }): JSX.Element {
     let content: string;
     if (typeof message.content === 'string') {
         content = message.content;
     } else {
-        content = message.content.map(s => s.text).join('');
+        content = message.content.map(() => null).join('');
     }
 
     if (message.role === 'user') {

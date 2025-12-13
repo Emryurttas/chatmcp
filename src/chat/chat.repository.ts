@@ -68,8 +68,12 @@ class ChatRepository {
             throw new Error(`chatId invalide : ${chatId}`);
         }
 
-        const chat = await this.find(chatId);
-        await this.writeToCache(chat);
+        await this.invalidateCache(chatId);
+        
+        const updatedChat = await this.collection.findOne({ _id: id });
+        if (updatedChat) {
+            await this.writeToCache(updatedChat);
+        }
     }
 
     async findLastByUser(userId: string): Promise<Chat | null> {
@@ -81,23 +85,27 @@ class ChatRepository {
 
         if (chats.length === 0) return null;
 
-        const cachedChat = await this.readFromCache(idAsString(chats[0]._id!));
-        if (cachedChat) return cachedChat;
-
+        const chatId = idAsString(chats[0]._id!);
+        
+        await this.invalidateCache(chatId);
         await this.writeToCache(chats[0]);
         return chats[0];
     }
 
     async updateTitle(id: string | ObjectId, title: string): Promise<void> {
         const _id = typeof id === "string" ? new ObjectId(id) : id;
+        const chatId = idAsString(_id);
 
         await this.collection.updateOne(
             { _id },
             { $set: { title } }
         );
 
-        const chat = await this.find(idAsString(_id));
-        await this.writeToCache(chat);
+        await this.invalidateCache(chatId);
+        const chat = await this.collection.findOne({ _id });
+        if (chat) {
+            await this.writeToCache(chat);
+        }
     }
 
     async writeToCache(chat: Chat): Promise<void> {
@@ -106,7 +114,16 @@ class ChatRepository {
         }
 
         const key = `chat:${idAsString(chat._id)}`;
-        await valkey.set(key, JSON.stringify(chat));
+        
+        const serialized = JSON.stringify(chat, (k, v) => {
+            if (v instanceof ObjectId) {
+                return v.toString();
+            }
+            return v;
+        });
+        
+        await valkey.set(key, serialized);
+        console.log(`Cache mis à jour pour chatId: ${idAsString(chat._id)}, messages: ${chat.messages?.length || 0}`);
     }
 
     async readFromCache(chatId: string): Promise<Chat | undefined> {
@@ -121,11 +138,20 @@ class ChatRepository {
             if (k === "creationDate" || k === "lastModificationDate") {
                 return new Date(v);
             }
+            if (k === "userId" || k === "_id") {
+                return new ObjectId(v);
+            }
             return v;
         });
 
-        console.log(`Utilisation des données mises en cache pour le chatId : ${chatId}`);
+        console.log(`Utilisation des données mises en cache pour le chatId : ${chatId}, messages: ${chat.messages?.length || 0}`);
         return chat;
+    }
+
+    async invalidateCache(chatId: string): Promise<void> {
+        const key = `chat:${chatId}`;
+        await valkey.del(key);
+        console.log(`Cache invalidé pour chatId: ${chatId}`);
     }
 }
 

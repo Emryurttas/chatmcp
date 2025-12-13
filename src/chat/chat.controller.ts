@@ -47,6 +47,11 @@ export class ChatController {
         const streamingMode = req.body.streamingMode === 'true';
         let conversationId = req.params.id as string;
 
+        if (!prompt || prompt.trim().length === 0) {
+            res.status(400).send('Le prompt ne peut pas être vide');
+            return;
+        }
+
         const chatExists = await chatRepository.exists(conversationId);
         if (!chatExists) {
             conversationId = await chatRepository.create(userId);
@@ -63,39 +68,46 @@ export class ChatController {
     }
 
     public async query(req: Request, res: Response): Promise<void> {
-        const userId = this.getUserId(req);
-        const conversationId = req.params.id as string;
-        const chatInstance = await ChatModel.create(userId, conversationId);
+        try {
+            const userId = this.getUserId(req);
+            const conversationId = req.params.id as string;
+            const chatInstance = await ChatModel.create(userId, conversationId);
 
-        const notifications: string[] = [];
-        const toolNotifier = (toolName: string) => {
-            const notification = `\`\`\`[Outil appelé] ${toolName}\`\`\``;
-            notifications.push(notification);
-        };
+            const notifications: string[] = [];
+            const toolNotifier = (toolName: string) => {
+                const notification = `\`\`\`[Outil appelé] ${toolName}\`\`\``;
+                notifications.push(notification);
+            };
 
-        let answer = await chatInstance.fetchAnswer(toolNotifier);
-        answer = answer.replace(/\n/g, 'RENDER-MD-LF');
-        res.send(answer);
+            let answer = await chatInstance.fetchAnswer(toolNotifier);
+            answer = answer.replace(/\n/g, 'RENDER-MD-LF');
+            res.send(answer);
+        } catch (error) {
+            console.error('Erreur dans query:', error);
+            const errorMessage = `RENDER-MD-ERROR ${String(error)}`;
+            res.status(500).send(errorMessage);
+        }
     }
 
     public async stream(req: Request, res: Response): Promise<void> {
         const userId = this.getUserId(req);
         const conversationId = req.params.id as string;
-        const chatInstance = await ChatModel.create(userId, conversationId);
-
-        res.setHeader('Content-Type', 'text/event-stream');
-        res.setHeader('Cache-Control', 'no-cache');
-        res.setHeader('Connection', 'keep-alive');
-        res.flushHeaders?.();
-
-        const notifications: string[] = [];
-        const toolNotifier = (toolName: string) => {
-            const notification = `\`\`\`[Outil appelé] ${toolName}\`\`\``;
-            notifications.push(notification);
-            res.write(`event: token\ndata: ${notification}\n\n`);
-        };
-
+        
         try {
+            const chatInstance = await ChatModel.create(userId, conversationId);
+
+            res.setHeader('Content-Type', 'text/event-stream');
+            res.setHeader('Cache-Control', 'no-cache');
+            res.setHeader('Connection', 'keep-alive');
+            res.flushHeaders?.();
+
+            const notifications: string[] = [];
+            const toolNotifier = (toolName: string) => {
+                const notification = `\`\`\`[Outil appelé] ${toolName}\`\`\``;
+                notifications.push(notification);
+                res.write(`event: token\ndata: ${notification}\n\n`);
+            };
+
             const stream = chatInstance.fetchAnswerStream(toolNotifier);
             for await (const token of stream) {
                 const formatted = token.replace(/\n/g, 'RENDER-MD-LF');
@@ -103,6 +115,7 @@ export class ChatController {
             }
             res.write(`event: close\ndata: \n\n`);
         } catch (error) {
+            console.error('Erreur dans stream:', error);
             const message = `RENDER-MD-ERROR ${String(error)}`;
             res.write(`event: token\ndata: ${message}\n\n`);
             res.write(`event: close\ndata: \n\n`);
