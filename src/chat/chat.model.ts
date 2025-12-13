@@ -1,17 +1,10 @@
 import { google } from '@ai-sdk/google';
-import { generateText, streamText, smoothStream, ToolSet, stepCountIs, StepResult } from 'ai';
+import { generateText, streamText, smoothStream, ToolSet, stepCountIs, StepResult, ModelMessage } from 'ai';
 import { Experimental_StdioMCPTransport } from "ai/mcp-stdio";
 import { chatRepository } from './chat.repository';
 import { experimental_createMCPClient as createMCPClient } from 'ai';
 
 const MODEL_NAME = google('models/gemini-2.5-flash');
-
-export type Segment = { type: 'text'; text: string };
-
-export type ModelMessage = {
-    role: 'user' | 'assistant';
-    content: string | Segment[];
-};
 
 export class ChatModel {
     private _chatId: string;
@@ -28,7 +21,7 @@ export class ChatModel {
         } else {
             const newChatId = await chatRepository.create(userId);
             const chat = await chatRepository.find(newChatId);
-            return new ChatModel(newChatId, chat?.title || "Nouvelle conversation");
+            return new ChatModel(newChatId, chat.title);
         }
     }
 
@@ -47,17 +40,7 @@ export class ChatModel {
 
     async messages(): Promise<ModelMessage[]> {
         const chat = await chatRepository.find(this._chatId);
-        return (chat.messages ?? [])
-            .filter(m => m.role === 'user' || m.role === 'assistant')
-            .map(m => ({
-                role: m.role as 'user' | 'assistant',
-                content: Array.isArray(m.content)
-                    ? m.content
-                        .filter(part => 'text' in part)
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .map(part => ({ type: 'text', text: (part as any).text }))
-                    : m.content ?? ''
-            }));
+        return chat.messages ?? [];
     }
 
     async addPrompt(prompt: string): Promise<void> {
@@ -74,13 +57,14 @@ export class ChatModel {
             });
             const timeClient = await createMCPClient({ transport: timeTransport });
             const timeTools = await timeClient.tools();
+            
             const osmTransport = new Experimental_StdioMCPTransport({
                 command: '/home/butinfo/bin/uvx',
                 args: ['osm-mcp-server'],
             });
             const osmClient = await createMCPClient({ transport: osmTransport });
-
             const osmTools = await osmClient.tools();
+            
             ChatModel._tools = {
                 ...timeTools,
                 ...osmTools
