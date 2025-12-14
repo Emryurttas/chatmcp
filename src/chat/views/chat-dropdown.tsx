@@ -23,6 +23,13 @@ export function ChatDropdown(props: PropsWithChildren<{ user?: { userName: strin
                         Nouvelle conversation
                     </a>
                 </li>
+
+                <li>
+                    <a href="/discuss" class="chat-dropdown-item">
+                        Discussion
+                    </a>
+                </li>
+                
             </ul>
         </details>
     );
