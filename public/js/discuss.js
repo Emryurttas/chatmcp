@@ -15,6 +15,31 @@ socket.on('info', (message) => {
     }
 });
 
+socket.on('message', (messageData) => {
+    console.log('Message reçu :', messageData);
+
+    const chatDiv = document.getElementById('chat');
+    if (chatDiv) {
+        const article = document.createElement('article');
+        article.className = 'user-message';
+
+        const header = document.createElement('div');
+        header.className = 'message-header';
+        header.textContent = `${messageData.sender} - ${new Date(messageData.date).toLocaleString()}`;
+
+        const content = document.createElement('div');
+        content.className = 'message-content';
+        content.textContent = messageData.content;
+
+        article.appendChild(header);
+        article.appendChild(content);
+
+        chatDiv.appendChild(article);
+
+    }
+});
+
+
 const sendButton = document.getElementById('send');
 const messageInput = document.getElementById('prompt');
 
