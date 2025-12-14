@@ -2,7 +2,10 @@ import { PropsWithChildren } from "@kitajs/html";
 
 export function ChatCount(props: PropsWithChildren<{ count: number }>): JSX.Element {
     return (
-        <div style={{
+        <div
+            id="chat-count"
+            hx-swap-oob="true"
+            style={{
                 textAlign: 'center',
                 flexGrow: 1,
                 color: 'white',
@@ -15,7 +18,7 @@ export function ChatCount(props: PropsWithChildren<{ count: number }>): JSX.Elem
                 class="btn-search"
                 hx-get="/chat/searchForm"
                 hx-target="#chat-count"
-                hx-swap="outerHTML"
+                hx-swap="innerHTML"
                 title="Rechercher un titre"
             >
                 <i class="fas fa-search"></i>
