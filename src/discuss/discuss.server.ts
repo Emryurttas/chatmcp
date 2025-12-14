@@ -18,6 +18,15 @@ export class DiscussServer {
         console.log(info);
         DiscussServer.io.emit('info', info);
 
+        socket.on('message', (messageContent: string) => {
+        const messageData = {
+            sender: userName,
+            date: new Date().toISOString(),
+            content: messageContent
+        };
+        DiscussServer.io.emit('message', messageData);
+        });
+
         socket.on('disconnect', (reason) => {
         const leaveMessage = `${userName} a quitté la discussion`;
         console.log(leaveMessage);
