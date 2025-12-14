@@ -14,3 +14,17 @@ socket.on('info', (message) => {
         chatDiv.appendChild(article);
     }
 });
+
+const sendButton = document.getElementById('send');
+const messageInput = document.getElementById('prompt');
+
+if (sendButton && messageInput) {
+    sendButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        const message = messageInput.value.trim();
+        if (message !== '') {
+            socket.emit('message', message);
+            messageInput.value = '';
+        }
+    });
+}
