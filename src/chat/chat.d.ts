@@ -1,14 +1,18 @@
 import { ModelMessage } from "ai";
 import { ObjectId } from "bson";
 
-export interface Chat{
-    _id?: ObjectId,
-    userId: ObjectId,
-    title: string
-    creationDate: Date,
-    lastModificationDate: Date,
+export interface ChatInfo {
+    _id?: ObjectId;
+    userId: ObjectId;
+    title: string;
+    creationDate: Date;
+    lastModificationDate: Date;
+}
+
+export interface Chat extends ChatInfo {
     messages: ModelMessage[];
 }
+
 // type extrait du SDK AI (fichier ai/dist/index.d.ts)
 type GenerationConfig = CallSettings & Prompt & {
     /**
