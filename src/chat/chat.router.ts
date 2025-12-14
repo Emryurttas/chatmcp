@@ -78,4 +78,12 @@ router.get(
     chatController.open.bind(chatController)
 );
 
+router.delete(
+    '/chat/delete/:id',
+    connectionRequired,
+    validateParams(paramsSchema),
+    isChatOwner,
+    chatController.delete.bind(chatController)
+);
+
 export default router;

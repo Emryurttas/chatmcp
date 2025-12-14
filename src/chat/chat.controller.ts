@@ -227,9 +227,22 @@ export class ChatController {
 
         res.send(page);
     }
+
     public async searchForm(req: Request, res: Response): Promise<void> {
         const searchText = (req.query.searchText as string) || '';
         res.send(ChatSearchForm({ searchText }));
+    }
+
+    public async delete(req: Request, res: Response): Promise<void> {
+        const chatId = req.params.id as string;
+
+        const deleted = await chatRepository.delete(chatId);
+
+        if (deleted) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(204);
+        }
     }
 }
 
