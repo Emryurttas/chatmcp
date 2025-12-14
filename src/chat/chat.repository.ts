@@ -152,7 +152,8 @@ class ChatRepository {
                     userId: 1,
                     title: 1,
                     creationDate: 1,
-                    lastModificationDate: 1
+                    lastModificationDate: 1,
+                    messageCount: { $size: "$messages" }
                 }
             }
         ];

@@ -7,6 +7,7 @@ export interface ChatInfo {
     title: string;
     creationDate: Date;
     lastModificationDate: Date;
+    messageCount?: number;
 }
 
 export interface Chat extends ChatInfo {
