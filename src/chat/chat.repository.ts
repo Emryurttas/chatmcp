@@ -141,26 +141,39 @@ class ChatRepository {
         return chat;
     }
     
-    async aggregateByUserId(userId: string, pageSize: number = 5, page: number = 1): Promise<ChatInfo[]> {
+    async aggregateByUserId(userId: string, pageSize: number = 5, page: number = 1): Promise<{ count: number; chatInfos: ChatInfo[] }> {
         const pipeline = [
             { $match: { userId: new ObjectId(userId) } },
-            { $sort: { lastModificationDate: -1 } },
-            { $skip: (page - 1) * pageSize },
-            { $limit: pageSize },
             {
-                $project: {
-                    _id: 1,
-                    userId: 1,
-                    title: 1,
-                    creationDate: 1,
-                    lastModificationDate: 1,
-                    messageCount: { $size: "$messages" }
+                $facet: {
+                    chats: [
+                        { $sort: { lastModificationDate: -1 } },
+                        { $skip: (page - 1) * pageSize },
+                        { $limit: pageSize },
+                        {
+                            $project: {
+                                _id: 1,
+                                userId: 1,
+                                title: 1,
+                                creationDate: 1,
+                                lastModificationDate: 1,
+                                messageCount: { $size: "$messages" }
+                            }
+                        }
+                    ],
+                    counts: [
+                        { $count: "total" }
+                    ]
                 }
             }
         ];
 
-        const result = await this.collection.aggregate<ChatInfo>(pipeline).toArray();
-        return result;
+        const result = await this.collection.aggregate(pipeline).toArray();
+
+        const chatInfos = result[0]?.chats ?? [];
+        const count = result[0]?.counts[0]?.total ?? 0;
+
+        return { count, chatInfos };
     }
 }
 
