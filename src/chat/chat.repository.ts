@@ -191,6 +191,19 @@ class ChatRepository {
         const key = `chat:${chatId}`;
         await valkey.del(key);
     }
+
+    async delete(chatId: string): Promise<boolean> {
+        const id = new ObjectId(chatId);
+
+        const chatExists = await this.collection.findOne({ _id: id });
+        if (!chatExists) {
+            throw new Error(`chatId invalide : ${chatId}`);
+        }
+
+        const result = await this.collection.deleteOne({ _id: id });
+        await this.deleteFromCache(chatId);
+        return result.deletedCount === 1;
+    }
 }
 
 export const chatRepository = new ChatRepository();
