@@ -6,7 +6,7 @@ function ChatListItem(chat: ChatInfo): JSX.Element {
     const chatIdStr = chat._id?.toString() || '';
 
     return (
-        <li class="chat-item" data-id={chatIdStr}>
+        <li class="chat-item" data-id={chatIdStr} id={`chat-item-${chatIdStr}`}>
             <div class="chat-header">
                 <div id={`chat-title-${chatIdStr}`}>
                     <ChatTitleDisplay title={chat.title} chatId={chatIdStr} />
@@ -23,11 +23,17 @@ function ChatListItem(chat: ChatInfo): JSX.Element {
 
             <div class="chat-footer">
                 <span>{chat.messageCount ?? 0} messages</span>
-                <form method="POST" action={`/chat/delete/${chat._id}`}>
-                    <button type="submit" title="Supprimer" class="btn-trash">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </form>
+                <button
+                    type="button"
+                    class="btn-trash"
+                    title="Supprimer"
+                    hx-delete={`/chat/delete/${chatIdStr}`}
+                    hx-confirm="Êtes-vous sûr de vouloir supprimer cette conversation ?"
+                    hx-target={`#chat-item-${chatIdStr}`}
+                    hx-swap="delete"
+                >
+                    <i class="fas fa-trash"></i>
+                </button>
             </div>
         </li>
     );
