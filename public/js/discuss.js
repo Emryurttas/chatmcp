@@ -1,7 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 /* eslint-disable no-undef */
-import escapeHtml from 'escape-html';
 
 const socket = io(window.location.origin);
 
@@ -37,7 +36,7 @@ socket.on('message', (messageData) => {
         article.appendChild(content);
 
         chatDiv.appendChild(article);
-
+        
     }
 });
 
