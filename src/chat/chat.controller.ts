@@ -177,7 +177,7 @@ export class ChatController {
 
     public async list(req: Request, res: Response): Promise<void> {
         const user = userController.getUserFromSession(req, res);
-        const chatInfos = await chatRepository.aggregateByUserId(idAsString(user._id));
+        const chatInfos = await chatRepository.aggregateByUserId(idAsString(user._id), 5);
 
         console.log('Résultat de aggregateByUserId:', chatInfos);
 
