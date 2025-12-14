@@ -18,6 +18,8 @@ export const paramsSchema = z.object({
 
 router.get('/chat', connectionRequired, chatController.chat.bind(chatController));
 router.get('/chat/new', connectionRequired, chatController.newChat.bind(chatController));
+router.get('/chat/list', connectionRequired, chatController.list.bind(chatController));
+router.get('/chat/searchForm', connectionRequired, chatController.searchForm.bind(chatController));
 
 router.post(
     '/chat/send/:id',
@@ -68,8 +70,6 @@ router.post(
     chatController.updateTitle.bind(chatController)
 );
 
-router.get('/chat/list', connectionRequired, chatController.list.bind(chatController));
-
 router.get(
     '/chat/:id',
     connectionRequired,
@@ -77,6 +77,5 @@ router.get(
     isChatOwner,
     chatController.open.bind(chatController)
 );
-
 
 export default router;
