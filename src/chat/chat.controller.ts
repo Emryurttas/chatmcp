@@ -9,6 +9,7 @@ import { TitleEdit } from './views/titleEdit';
 import { ChatTitleDisplay } from './views/chat-title';
 import { idAsString } from '../utils/id-as-string';
 import { userController } from '../user/user.controller';
+import { ChatListPage } from './views/chat-list-page';
 
 export class ChatController {
     private getUserId(req: Request, res: Response): string {
@@ -175,12 +176,13 @@ export class ChatController {
     }
 
     public async list(req: Request, res: Response): Promise<void> {
-        const userId = this.getUserId(req, res);
-        const chatList = await chatRepository.aggregateByUserId(userId);
+        const user = userController.getUserFromSession(req, res);
+        const chatInfos = await chatRepository.aggregateByUserId(idAsString(user._id));
 
-        console.log('Résultat de aggregateByUserId:', chatList);
+        console.log('Résultat de aggregateByUserId:', chatInfos);
 
-        res.json(chatList);
+        const page = ChatListPage({ user, chatInfos });
+        res.send(page);
     }
 }
 

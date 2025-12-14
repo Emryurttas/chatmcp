@@ -7,7 +7,6 @@ export function NavBar(props: PropsWithChildren<{
     user?: { userName: string }; 
     chatTitle?: string;
     chatId?: string;
-    conversationCount?: number;
 }>): JSX.Element {
     return (
         <nav style={{
@@ -29,10 +28,6 @@ export function NavBar(props: PropsWithChildren<{
                 {props.chatTitle && props.chatId && (
                     <ChatTitleDisplay title={props.chatTitle} chatId={props.chatId} />
                 )}
-            </div>
-
-            <div style={{ textAlign: 'center' }}>
-                {props.conversationCount !== undefined && `Conversations : ${props.conversationCount}`}
             </div>
 
             <ul style={{

@@ -43,6 +43,23 @@ form button {
     cursor: pointer;
 }
 
+.btn-trash {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 36px !important;
+    height: 36px !important;
+    padding: 4px !important;
+    background-color: #688fe5 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    font-size: 1.1rem !important;
+    line-height: 1 !important;
+    margin-top: 2px !important;
+}
+
 #conversation-id {
     margin-top: 5px;
     font-size: 0.9em;
@@ -119,4 +136,79 @@ form button {
 .title-edit-cancel {
     background-color: #ccc;
     color: black;
+}
+.chat-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.chat-item {
+    list-style: none;
+    margin-bottom: 1em;
+    border-radius: 6px;
+    overflow: hidden;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    background-color: #11265eff;
+    color: white;
+    padding: 0.75em 1em;
+    font-weight: bold;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-access-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: #2563eb;
+    border-radius: 6px;
+    padding: 6px 10px;
+    text-decoration: none;
+    font-size: 1.3rem;
+    min-width: 36px;
+    min-height: 36px;
+}
+
+.chat-dates {
+    background-color: #11191f;
+    color: #d1d5db;
+    padding: 0.5em 1em;
+    font-size: 0.9em;
+    line-height: 1.4em;
+    width: 100%;
+}
+
+.chat-footer {
+    background-color: #0f172a;
+    color: #f3f4f6;
+    padding: 0.5em 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9em;
+    width: 100%;
+}
+
+.chat-title-display {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.chat-title-display i.fas.fa-edit {
+    cursor: pointer;
+    color: #f3f4f6;
 }
