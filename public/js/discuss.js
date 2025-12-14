@@ -1,6 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 /* eslint-disable no-undef */
+import escapeHtml from 'escape-html';
+
 const socket = io(window.location.origin);
 
 socket.on('info', (message) => {
@@ -29,7 +31,7 @@ socket.on('message', (messageData) => {
 
         const content = document.createElement('div');
         content.className = 'message-content';
-        content.textContent = messageData.content;
+        content.innerHTML = escapeHtml(messageData.content);
 
         article.appendChild(header);
         article.appendChild(content);
@@ -38,7 +40,6 @@ socket.on('message', (messageData) => {
 
     }
 });
-
 
 const sendButton = document.getElementById('send');
 const messageInput = document.getElementById('prompt');
