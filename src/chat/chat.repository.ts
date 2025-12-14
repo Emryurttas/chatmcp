@@ -141,10 +141,11 @@ class ChatRepository {
         return chat;
     }
     
-    async aggregateByUserId(userId: string, pageSize: number = 5): Promise<ChatInfo[]> {
+    async aggregateByUserId(userId: string, pageSize: number = 5, page: number = 1): Promise<ChatInfo[]> {
         const pipeline = [
             { $match: { userId: new ObjectId(userId) } },
             { $sort: { lastModificationDate: -1 } },
+            { $skip: (page - 1) * pageSize },
             { $limit: pageSize },
             {
                 $project: {
