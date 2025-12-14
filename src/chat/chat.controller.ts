@@ -8,17 +8,16 @@ import { chatRepository } from './chat.repository';
 import { TitleEdit } from './views/titleEdit';
 import { ChatTitleDisplay } from './views/chat-title';
 import { idAsString } from '../utils/id-as-string';
+import { userController } from '../user/user.controller';
 
 export class ChatController {
-    private getUserId(req: Request): string {
-        ok(req.session.user);
-        const user = req.session.user;
-        ok(user._id);
+    private getUserId(req: Request, res: Response): string {
+        const user = userController.getUserFromSession(req, res);
         return idAsString(user._id);
     }
 
     public async chat(req: Request, res: Response): Promise<void> {
-        const userId = this.getUserId(req);
+        const userId = this.getUserId(req, res);
         const user = req.session.user;
 
         let chatInstance: ChatModel;
@@ -42,7 +41,7 @@ export class ChatController {
     }
 
     public async sendPrompt(req: Request, res: Response): Promise<void> {
-        const userId = this.getUserId(req);
+        const userId = this.getUserId(req, res);
         const prompt = req.body.prompt;
         const streamingMode = req.body.streamingMode === 'true';
         let conversationId = req.params.id as string;
@@ -69,7 +68,7 @@ export class ChatController {
 
     public async query(req: Request, res: Response): Promise<void> {
         try {
-            const userId = this.getUserId(req);
+            const userId = this.getUserId(req, res);
             const conversationId = req.params.id as string;
             const chatInstance = await ChatModel.create(userId, conversationId);
 
@@ -90,7 +89,7 @@ export class ChatController {
     }
 
     public async stream(req: Request, res: Response): Promise<void> {
-        const userId = this.getUserId(req);
+        const userId = this.getUserId(req, res);
         const conversationId = req.params.id as string;
         
         try {
@@ -125,7 +124,7 @@ export class ChatController {
     }
 
     public async newChat(req: Request, res: Response): Promise<void> {
-        const userId = this.getUserId(req);
+        const userId = this.getUserId(req, res);
         const user = req.session.user;
 
         const chatInstance = await ChatModel.create(userId);
@@ -173,6 +172,15 @@ export class ChatController {
         await chatRepository.updateTitle(chatId, title);
         const component = ChatTitleDisplay({ title, chatId });
         res.send(component);
+    }
+
+    public async list(req: Request, res: Response): Promise<void> {
+        const userId = this.getUserId(req, res);
+        const chatList = await chatRepository.aggregateByUserId(userId);
+
+        console.log('Résultat de aggregateByUserId:', chatList);
+
+        res.json(chatList);
     }
 }
 

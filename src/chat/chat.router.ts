@@ -68,4 +68,7 @@ router.post(
     chatController.updateTitle.bind(chatController)
 );
 
+router.get('/chat/list', connectionRequired, chatController.list.bind(chatController));
+
+
 export default router;
