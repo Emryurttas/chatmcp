@@ -97,7 +97,7 @@ class ChatRepository {
         );
 
         const chat = await this.collection.findOne({ _id });
-        if (chat) {
+                if (chat) {
             await this.writeToCache(chat);
         }
     }
@@ -140,7 +140,7 @@ class ChatRepository {
         console.log(`Utilisation des données mises en cache pour le chatId : ${chatId}`);
         return chat;
     }
-    
+
     async aggregateByUserId(userId: string, pageSize: number = 5, page: number = 1, searchText: string = ''): Promise<{ count: number; chatInfos: ChatInfo[] }> {
 
         const matchStage: any = { userId: new ObjectId(userId) };

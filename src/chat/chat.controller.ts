@@ -11,6 +11,7 @@ import { idAsString } from '../utils/id-as-string';
 import { userController } from '../user/user.controller';
 import { ChatList } from './views/chat-list';
 import { ChatListPage } from './views/chat-list-page';
+import { ChatSearchForm } from './views/chatSearchForm';
 
 export class ChatController {
     private getUserId(req: Request, res: Response): string {
@@ -225,6 +226,10 @@ export class ChatController {
         });
 
         res.send(page);
+    }
+    public async searchForm(req: Request, res: Response): Promise<void> {
+        const searchText = (req.query.searchText as string) || '';
+        res.send(ChatSearchForm({ searchText }));
     }
 }
 
