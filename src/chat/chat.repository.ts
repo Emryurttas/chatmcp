@@ -147,6 +147,9 @@ class ChatRepository {
                 $match: { userId: new ObjectId(userId) }
             },
             {
+                $sort: { lastModificationDate: -1 }
+            },
+            {
                 $project: {
                     _id: 1,
                     userId: 1,
