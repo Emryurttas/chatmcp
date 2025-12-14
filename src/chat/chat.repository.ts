@@ -142,7 +142,23 @@ class ChatRepository {
     }
     
     async aggregateByUserId(userId: string): Promise<ChatInfo[]> {
-        throw Error('Code à écrire plus tard');
+        const pipeline = [
+            {
+                $match: { userId: new ObjectId(userId) }
+            },
+            {
+                $project: {
+                    _id: 1,
+                    userId: 1,
+                    title: 1,
+                    creationDate: 1,
+                    lastModificationDate: 1
+                }
+            }
+        ];
+
+        const result = await this.collection.aggregate<ChatInfo>(pipeline).toArray();
+        return result;
     }
 }
 
