@@ -9,6 +9,7 @@ import { TitleEdit } from './views/titleEdit';
 import { ChatTitleDisplay } from './views/chat-title';
 import { idAsString } from '../utils/id-as-string';
 import { userController } from '../user/user.controller';
+import { ChatList } from './views/chat-list';
 import { ChatListPage } from './views/chat-list-page';
 
 export class ChatController {
@@ -177,12 +178,24 @@ export class ChatController {
 
     public async list(req: Request, res: Response): Promise<void> {
         const user = userController.getUserFromSession(req, res);
-        const chatInfos = await chatRepository.aggregateByUserId(idAsString(user._id), 5);
+        
+        let page = parseInt(req.query.page as string, 10);
+        if (isNaN(page) || page < 1) page = 1;
 
-        console.log('Résultat de aggregateByUserId:', chatInfos);
+        const pageSize = 5;
+        const { count, chatInfos } = await chatRepository.aggregateByUserId(
+            idAsString(user._id),
+            pageSize,
+            page
+        );
 
-        const page = ChatListPage({ user, chatInfos });
-        res.send(page);
+        const isHxRequest = !!req.header('HX-Request');
+
+        if (isHxRequest) {
+            res.send(ChatList({ user, chatInfos, page, pageSize, totalCount: count }));
+        } else {
+            res.send(ChatListPage({ user, chatInfos, page, pageSize, totalCount: count }));
+        }
     }
 
     public async open(req: Request, res: Response): Promise<void> {
