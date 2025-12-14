@@ -16,7 +16,12 @@ export class DiscussServer {
         const userName = socket.request.session.user.userName;
         const info = `${userName} a rejoint la discussion`;
         console.log(info);
-
         DiscussServer.io.emit('info', info);
+
+        socket.on('disconnect', (reason) => {
+        const leaveMessage = `${userName} a quitté la discussion`;
+        console.log(leaveMessage);
+        DiscussServer.io.emit('info', leaveMessage);
+    });
     }
 }
