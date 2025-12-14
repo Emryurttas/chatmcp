@@ -10,8 +10,9 @@ import discussRouter from './discuss/discuss.router';
 import { createServer } from 'http';
 import { DiscussServer } from './discuss/discuss.server';
 
+const port = process.argv[2] || process.env.PORT || 7000;
+
 const app = express();
-const port = process.env.PORT || 7000;
 
 const sessionMiddleware = session({
     store: valkeyStore,
