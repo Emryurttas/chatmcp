@@ -1,6 +1,6 @@
 import { ObjectId } from "bson";
 import { mongodb } from "../services/mongo";
-import { Chat } from "./chat";
+import { Chat, ChatInfo } from "./chat";
 import { ModelMessage } from "ai";
 import { valkey } from "../services/valkey";
 import { idAsString } from "../utils/id-as-string";
@@ -139,6 +139,10 @@ class ChatRepository {
 
         console.log(`Utilisation des données mises en cache pour le chatId : ${chatId}`);
         return chat;
+    }
+    
+    async aggregateByUserId(userId: string): Promise<ChatInfo[]> {
+        throw Error('Code à écrire plus tard');
     }
 }
 
