@@ -13,7 +13,7 @@ function ChatListItem(chat: ChatInfo): JSX.Element {
                 <div id={`chat-title-${chatIdStr}`}>
                     <ChatTitleDisplay title={chat.title} chatId={chatIdStr} />
                 </div>
-                <a href="#" title="Accéder à la conversation" class="chat-access-btn">
+                <a href={`/chat/${chatIdStr}`} title="Accéder à la conversation" class="chat-access-btn">
                     <i class="fas fa-arrow-right"></i>
                 </a>
             </div>

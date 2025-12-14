@@ -70,5 +70,13 @@ router.post(
 
 router.get('/chat/list', connectionRequired, chatController.list.bind(chatController));
 
+router.get(
+    '/chat/:id',
+    connectionRequired,
+    validateParams(paramsSchema),
+    isChatOwner,
+    chatController.open.bind(chatController)
+);
+
 
 export default router;

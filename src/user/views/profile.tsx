@@ -34,7 +34,7 @@ export function ProfilePage(props: PropsWithChildren<{ user: User }>): JSX.Eleme
             </body>
         </html>
     );
-}
+} 
 
 
 export function EmailDisplay({ email, message }: { email: string; message?: string }): JSX.Element {

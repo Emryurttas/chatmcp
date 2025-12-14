@@ -184,6 +184,32 @@ export class ChatController {
         const page = ChatListPage({ user, chatInfos });
         res.send(page);
     }
+
+    public async open(req: Request, res: Response): Promise<void> {
+        const user = userController.getUserFromSession(req, res);
+        const userId = idAsString(user._id);
+        const conversationId = req.params.id as string;
+
+        const chatExists = await chatRepository.exists(conversationId);
+        if (!chatExists) {
+            res.status(404).send('Conversation non trouvée');
+            return;
+        }
+
+        const chat = await chatRepository.find(conversationId);
+
+        const chatInstance = await ChatModel.create(userId, conversationId);
+        const messages = await chatInstance.messages();
+
+        const page = ChatView({
+            conversationId: chatInstance.chatId,
+            messages,
+            chatTitle: chat.title,
+            user,
+        });
+
+        res.send(page);
+    }
 }
 
 export const chatController = new ChatController();
