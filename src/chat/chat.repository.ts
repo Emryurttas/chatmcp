@@ -182,6 +182,15 @@ class ChatRepository {
 
         return { count, chatInfos };
     }
+
+    async deleteFromCache(chatId: string): Promise<void> {
+        if (!chatId) {
+            throw new Error("chatId requis pour supprimer du cache");
+        }
+
+        const key = `chat:${chatId}`;
+        await valkey.del(key);
+    }
 }
 
 export const chatRepository = new ChatRepository();
