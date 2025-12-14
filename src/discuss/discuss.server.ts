@@ -16,5 +16,7 @@ export class DiscussServer {
         const userName = socket.request.session.user.userName;
         const info = `${userName} a rejoint la discussion`;
         console.log(info);
+
+        DiscussServer.io.emit('info', info);
     }
 }
