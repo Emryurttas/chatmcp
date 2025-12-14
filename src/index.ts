@@ -1,14 +1,17 @@
 import express, { NextFunction, Request, Response } from 'express';
-import { HomeView } from './views/home';
-import { ErrorPageView } from './views/error/error-page';
-import chatRouter from './chat/chat.router';
-import userRouter from './user/user.router';
-import { ErrorDialogView } from "./chat/views/error-dialog";
 import session from 'express-session';
 import { valkeyStore } from './services/valkey';
+import { HomeView } from './views/home';
+import { ErrorPageView } from './views/error/error-page';
+import { ErrorDialogView } from './chat/views/error-dialog';
+import chatRouter from './chat/chat.router';
+import userRouter from './user/user.router';
+import discussRouter from './discuss/discuss.router';
+import { createServer } from 'http';
+import { Server as SocketIOServer } from 'socket.io';
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 7000;
 
 app.use(session({
     store: valkeyStore,
@@ -36,7 +39,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/', chatRouter);
 app.use('/', userRouter);
-
+app.use('/', discussRouter);
 
 app.get('/time', (req: Request, res: Response) => {
     const now = new Date();
@@ -48,19 +51,23 @@ app.get('/erreur', () => {
     throw new Error("Ceci est une erreur ");
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    console.log(`ERREUR : ${err.message}`);
     if (req.headers['hx-request']) {
-        const dialog = ErrorDialogView({ message: err.message });
-        res.send(dialog);
+        res.send(ErrorDialogView({ message: err.message }));
     } else {
-        const page = ErrorPageView({ message: err.message });
-        res.send(page);
+        res.send(ErrorPageView({ message: err.message }));
     }
 });
 
+const server = createServer(app);
+const io = new SocketIOServer(server);
 
-app.listen(port, () => {
-    console.log(`Serveur local démarré : http://localhost:${port}`);
+io.on('connection', (socket) => {
+    socket.on('sendMessage', (data) => {
+        io.emit('newMessage', data);
+    });
+});
+
+server.listen(port, () => {
+    console.log(`Serveur local démarré sur http://localhost:${port}`);
 });
