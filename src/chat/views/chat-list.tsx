@@ -2,7 +2,7 @@ import { User } from "../../user/user";
 import { ChatInfo } from "../chat";
 import { ChatTitleDisplay } from "./chat-title";
 
-function ChatListItem(chat: ChatInfo): JSX.Element {
+function ChatListItem(chat: ChatInfo, totalCount: number): JSX.Element {
     const chatIdStr = chat._id?.toString() || '';
 
     return (
@@ -44,7 +44,7 @@ export function ChatList(props: { user: User; chatInfos: ChatInfo[]; page: numbe
 
     return (
         <ul class="chat-list">
-            {chatInfos.map(chat => ChatListItem(chat))}
+            {chatInfos.map(chat => ChatListItem(chat, totalCount))}
 
             {(page * pageSize) < totalCount && (
                 <li class="chat-load-more">

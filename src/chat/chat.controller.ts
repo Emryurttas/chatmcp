@@ -12,6 +12,7 @@ import { userController } from '../user/user.controller';
 import { ChatList } from './views/chat-list';
 import { ChatListPage } from './views/chat-list-page';
 import { ChatSearchForm } from './views/chatSearchForm';
+import { ChatCount } from './views/chatCount';
 
 export class ChatController {
     private getUserId(req: Request, res: Response): string {
@@ -239,7 +240,16 @@ export class ChatController {
         const deleted = await chatRepository.delete(chatId);
 
         if (deleted) {
-            res.sendStatus(200);
+            const userId = req.session.user?._id?.toString();
+            let remainingCount = 0;
+
+            if (userId) {
+                const { count } = await chatRepository.aggregateByUserId(userId, 1, 1);
+                remainingCount = count;
+            }
+
+            const html = ChatCount({ count: remainingCount });
+            res.status(200);
         } else {
             res.sendStatus(204);
         }
