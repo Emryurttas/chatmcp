@@ -8,18 +8,19 @@ import chatRouter from './chat/chat.router';
 import userRouter from './user/user.router';
 import discussRouter from './discuss/discuss.router';
 import { createServer } from 'http';
-import { Server as SocketIOServer } from 'socket.io';
+import { DiscussServer } from './discuss/discuss.server';
 
 const app = express();
 const port = process.env.PORT || 7000;
 
-app.use(session({
+const sessionMiddleware = session({
     store: valkeyStore,
     secret: 'cc46091749e55f33fe4046b9c8855a13',
     saveUninitialized: false,
     resave: false
-}));
+});
 
+app.use(sessionMiddleware);
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
@@ -59,15 +60,9 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-const server = createServer(app);
-const io = new SocketIOServer(server);
+const httpServer = createServer(app);
+DiscussServer.create(httpServer, sessionMiddleware);
 
-io.on('connection', (socket) => {
-    socket.on('sendMessage', (data) => {
-        io.emit('newMessage', data);
-    });
-});
-
-server.listen(port, () => {
+httpServer.listen(port, () => {
     console.log(`Serveur local démarré sur http://localhost:${port}`);
 });
