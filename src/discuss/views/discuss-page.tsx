@@ -26,7 +26,6 @@ export function discussPageView(props: { conversationId: string; user: User; mes
                     <script src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/render-markdown.js" type="module"></script>
                     <script src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/htmx.js"></script>
                     <script src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/sse.js"></script>
-                    <script src="/socket.io/socket.io.js"></script>
                 </head>
                 <body>
                     {NavBar({ user: displayUser, chatTitle: "Discussion", chatId: props.conversationId })}
@@ -49,6 +48,9 @@ export function discussPageView(props: { conversationId: string; user: User; mes
                     <div id="conversation-id" style={{ display: 'none' }}>
                         {props.conversationId}
                     </div>
+
+                    <script src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/socket.io.min.js"></script>
+                    <script src="/js/discuss.js"></script>
                 </body>
             </html>
         </>
