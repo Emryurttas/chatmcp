@@ -21,7 +21,7 @@ export function ChatListPage(props: { user: User; chatInfos: ChatInfo[]; page: n
                     <script src="https://unpkg.com/htmx.org@1.9.4/dist/htmx.min.js"></script>
                 </head>
                 <body>
-                    {NavBar({ user })}
+                    <NavBar user={user} chatCount={totalCount} />
                     <main>
                         <ChatList
                             user={user}

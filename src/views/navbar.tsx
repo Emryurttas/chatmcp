@@ -2,11 +2,13 @@ import { PropsWithChildren } from "@kitajs/html";
 import { UserDropdown } from "../user/views/user-dropdown";
 import { ChatDropdown } from "../chat/views/chat-dropdown";
 import { ChatTitleDisplay } from "../chat/views/chat-title";
+import { ChatCount } from "../chat/views/chatCount";
 
 export function NavBar(props: PropsWithChildren<{ 
     user?: { userName: string }; 
     chatTitle?: string;
     chatId?: string;
+    chatCount?: number;
 }>): JSX.Element {
     return (
         <nav style={{
@@ -29,6 +31,8 @@ export function NavBar(props: PropsWithChildren<{
                     <ChatTitleDisplay title={props.chatTitle} chatId={props.chatId} />
                 )}
             </div>
+
+            {typeof props.chatCount === 'number' && <ChatCount count={props.chatCount} />}
 
             <ul style={{
                 listStyle: 'none',
