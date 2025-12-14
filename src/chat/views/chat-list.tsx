@@ -1,6 +1,5 @@
 import { User } from "../../user/user";
 import { ChatInfo } from "../chat";
-import { NavBar } from "../../views/navbar";
 import { ChatTitleDisplay } from "./chat-title";
 
 function ChatListItem(chat: ChatInfo): JSX.Element {
@@ -34,8 +33,8 @@ function ChatListItem(chat: ChatInfo): JSX.Element {
     );
 }
 
-export function ChatList(props: { user: User; chatInfos: ChatInfo[]; page: number; pageSize: number; totalCount: number }): JSX.Element {
-    const { user, chatInfos, page, pageSize, totalCount } = props;
+export function ChatList(props: { user: User; chatInfos: ChatInfo[]; page: number; pageSize: number; totalCount: number; searchText?: string }): JSX.Element {
+    const { chatInfos, page, pageSize, totalCount, searchText = '' } = props;
 
     return (
         <ul class="chat-list">
@@ -44,8 +43,8 @@ export function ChatList(props: { user: User; chatInfos: ChatInfo[]; page: numbe
             {(page * pageSize) < totalCount && (
                 <li class="chat-load-more">
                     <a
-                        href={`/chat/list?page=${page + 1}`}
-                        hx-get={`/chat/list?page=${page + 1}`}
+                        href={`/chat/list?page=${page + 1}&searchText=${encodeURIComponent(searchText)}`}
+                        hx-get={`/chat/list?page=${page + 1}&searchText=${encodeURIComponent(searchText)}`}
                         hx-swap="outerHTML"
                         hx-trigger="click"
                         class="btn-load-more"

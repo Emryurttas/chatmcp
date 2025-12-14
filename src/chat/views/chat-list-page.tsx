@@ -3,8 +3,8 @@ import { ChatInfo } from "../chat";
 import { NavBar } from "../../views/navbar";
 import { ChatList } from "./chat-list";
 
-export function ChatListPage(props: { user: User; chatInfos: ChatInfo[]; page: number; pageSize: number; totalCount: number }): JSX.Element {
-    const { user, chatInfos, page, pageSize, totalCount } = props;
+export function ChatListPage(props: { user: User; chatInfos: ChatInfo[]; page: number; pageSize: number; totalCount: number; searchText?: string }): JSX.Element {
+    const { user, chatInfos, page, pageSize, totalCount, searchText = '' } = props;
 
     return (
         <>
@@ -23,7 +23,14 @@ export function ChatListPage(props: { user: User; chatInfos: ChatInfo[]; page: n
                 <body>
                     {NavBar({ user })}
                     <main>
-                        <ChatList user={user} chatInfos={chatInfos} page={page} pageSize={pageSize} totalCount={totalCount} />
+                        <ChatList
+                            user={user}
+                            chatInfos={chatInfos}
+                            page={page}
+                            pageSize={pageSize}
+                            totalCount={totalCount}
+                            searchText={searchText}
+                        />
                     </main>
                 </body>
             </html>

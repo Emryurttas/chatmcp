@@ -178,25 +178,28 @@ export class ChatController {
 
     public async list(req: Request, res: Response): Promise<void> {
         const user = userController.getUserFromSession(req, res);
-        
+
         let page = parseInt(req.query.page as string, 10);
         if (isNaN(page) || page < 1) page = 1;
 
         const pageSize = 5;
+        const searchText = (req.query.searchText as string) || '';
         const { count, chatInfos } = await chatRepository.aggregateByUserId(
             idAsString(user._id),
             pageSize,
-            page
+            page,
+            searchText
         );
 
         const isHxRequest = !!req.header('HX-Request');
 
         if (isHxRequest) {
-            res.send(ChatList({ user, chatInfos, page, pageSize, totalCount: count }));
+            res.send(ChatList({ user, chatInfos, page, pageSize, totalCount: count, searchText }));
         } else {
-            res.send(ChatListPage({ user, chatInfos, page, pageSize, totalCount: count }));
+            res.send(ChatListPage({ user, chatInfos, page, pageSize, totalCount: count, searchText }));
         }
     }
+
 
     public async open(req: Request, res: Response): Promise<void> {
         const user = userController.getUserFromSession(req, res);

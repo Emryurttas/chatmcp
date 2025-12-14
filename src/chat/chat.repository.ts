@@ -141,9 +141,16 @@ class ChatRepository {
         return chat;
     }
     
-    async aggregateByUserId(userId: string, pageSize: number = 5, page: number = 1): Promise<{ count: number; chatInfos: ChatInfo[] }> {
+    async aggregateByUserId(userId: string, pageSize: number = 5, page: number = 1, searchText: string = ''): Promise<{ count: number; chatInfos: ChatInfo[] }> {
+
+        const matchStage: any = { userId: new ObjectId(userId) };
+
+        if (searchText && searchText.trim().length > 0) {
+            matchStage.title = { $regex: searchText.trim(), $options: 'i' };
+        }
+
         const pipeline = [
-            { $match: { userId: new ObjectId(userId) } },
+            { $match: matchStage },
             {
                 $facet: {
                     chats: [
