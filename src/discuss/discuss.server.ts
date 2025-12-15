@@ -10,6 +10,27 @@ export class DiscussServer {
     public static create(httpServer: HttpServer, sessionMiddleware: any) {
         DiscussServer.publishClient = new Redis();
         
+        const subscribeClient = new Redis();
+        
+        subscribeClient.subscribe("info", "message", (err, count) => {
+            if (err) {
+                console.error("Échec de l'abonnement : %s", err.message);
+            } else {
+                console.log(
+                    `Abonnement réussi ! Ce client est actuellement abonné à ${count} canaux.`
+                );
+            }
+        });
+        
+        subscribeClient.on("message", (channel, message) => {
+            if (channel === "info") {
+                DiscussServer.io.emit("info", message);
+            } else if (channel === "message") {
+                const messageData = JSON.parse(message);
+                DiscussServer.io.emit("message", messageData);
+            }
+        });
+        
         DiscussServer.io = new IoServer(httpServer);
         DiscussServer.io.engine.use(sessionMiddleware);
         DiscussServer.io.on('connection', DiscussServer.onClientConnection);
