@@ -46,7 +46,8 @@ socket.on('message', (messageData) => {
 
         const header = document.createElement('div');
         header.className = 'message-header';
-        header.textContent = `${messageData.sender} le ${new Date(messageData.date).toLocaleString()}`;
+        header.textContent = `${messageData.sender} le ${new Date(messageData.date).toLocaleDateString('fr-FR')} à ${new Date(messageData.date).toLocaleTimeString('fr-FR', { hour12: false })}`;
+
 
         const content = document.createElement('div');
         content.className = 'message-content';
