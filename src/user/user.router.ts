@@ -33,6 +33,8 @@ userRouter.get('/user/editEmail', userController.editEmail.bind(userController))
 
 userRouter.get('/user/displayEmail', userController.displayEmail.bind(userController));
 
+userRouter.get('/user/:id/avatar', userController.avatar.bind(userController));
+
 userRouter.post(
   '/user/updateEmail',
   validateBody(updateEmailSchema),

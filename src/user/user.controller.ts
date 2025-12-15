@@ -7,6 +7,8 @@ import { ObjectId } from 'bson';
 import { User } from './user';
 import { EmailDisplay, ProfilePage } from './views/profile';
 import { EmailEdit } from './views/emailEdit';
+import { promises as fs } from 'fs';
+import path from 'path';
 
 export class UserController{
     public async showUser(req: Request, res: Response): Promise<void> {
@@ -108,6 +110,19 @@ export class UserController{
             const user = req.session.user;
             const component = EmailDisplay({ email: user?.email || "", message: "Erreur lors de la mise à jour." });
             res.status(500).send(component);
+        }
+    }
+    public async avatar(req: Request, res: Response): Promise<void> {
+        const userId = req.params.id;
+        
+        const avatarPath = path.join(process.cwd(), 'restricted', 'avatars', `${userId}.png`);
+        
+        try {
+            await fs.stat(avatarPath);
+            res.sendFile(avatarPath);
+        } catch (error) {
+            const defaultAvatarPath = path.join(process.cwd(), 'restricted', 'avatars', 'default_avatar.webp');
+            res.sendFile(defaultAvatarPath);
         }
     }
 }
