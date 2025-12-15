@@ -40,22 +40,22 @@ export class DiscussServer {
         const userName = socket.request.session.user.userName;
         const info = `${userName} a rejoint la discussion`;
         console.log(info);
-        DiscussServer.io.emit('info', info);
+        DiscussServer.publishClient.publish('info', info);
 
         socket.on('message', (messageContent: string) => {
-        const messageData = {
-            sender: userName,
-            date: new Date().toISOString(),
-            content: messageContent
-        };
-        DiscussServer.io.emit('message', messageData);
+            const messageData = {
+                sender: userName,
+                date: new Date().toISOString(),
+                content: messageContent
+            };
+            DiscussServer.publishClient.publish('message', JSON.stringify(messageData));
         });
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         socket.on('disconnect', (reason) => {
-        const leaveMessage = `${userName} a quitté la discussion`;
-        console.log(leaveMessage);
-        DiscussServer.io.emit('info', leaveMessage);
-    });
+            const leaveMessage = `${userName} a quitté la discussion`;
+            console.log(leaveMessage);
+            DiscussServer.publishClient.publish('info', leaveMessage);
+        });
     }
 }
