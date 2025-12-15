@@ -5,10 +5,12 @@ import { userRepository } from './user.repository';
 import bcrypt from 'bcrypt';
 import { ObjectId } from 'bson';
 import { User } from './user';
-import { EmailDisplay, ProfilePage } from './views/profile';
+import { AvatarDisplay, EmailDisplay, ProfilePage } from './views/profile';
 import { EmailEdit } from './views/emailEdit';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { idAsString } from '../utils/id-as-string';
+import { AvatarEdit } from './views/avatarEdit';
 
 export class UserController{
     public async showUser(req: Request, res: Response): Promise<void> {
@@ -124,6 +126,37 @@ export class UserController{
             const defaultAvatarPath = path.join(process.cwd(), 'restricted', 'avatars', 'default_avatar.webp');
             res.sendFile(defaultAvatarPath);
         }
+    }
+
+        public editAvatar(req: Request, res: Response): void {
+        const user = this.getUserFromSession(req, res);
+        const component = AvatarEdit({ userId: idAsString(user._id) });
+        res.send(component);
+    }
+
+    public displayAvatar(req: Request, res: Response): void {
+        const user = this.getUserFromSession(req, res);
+        const component = AvatarDisplay({ userId: idAsString(user._id) });
+        res.send(component);
+    }
+
+    public async updateAvatar(req: Request, res: Response): Promise<void> {
+        const user = this.getUserFromSession(req, res);
+
+        if (!req.files || !req.files.avatar) {
+            res.status(400).send("Aucun fichier avatar envoyé");
+            return;
+        }
+
+        const avatarFile = req.files.avatar as any;
+        const uploadDir = path.join(process.cwd(), 'restricted', 'avatars');
+        const uploadPath = path.join(uploadDir, `${user._id}.png`);
+
+        await fs.mkdir(uploadDir, { recursive: true });
+        await avatarFile.mv(uploadPath);
+
+        const component = AvatarDisplay({ userId: idAsString(user._id) });
+        res.send(component);
     }
 }
 export const userController = new UserController();
