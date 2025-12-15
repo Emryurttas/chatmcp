@@ -20,10 +20,49 @@ html, body {
 }
 
 .user-message {
-    color: white;
+    background-color: #1c3c74;
+    border-radius: 8px;
     margin-top: 1em;
-    padding: 0.5em;
+    padding: 2em;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1em;
+    color: white;
+    width: 100%;
 }
+
+.user-message .message-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1em;
+    width: 100%;
+}
+
+.user-message .message-avatar {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+}
+
+.user-message .message-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.user-message .message-header {
+    font-weight: bold;
+    text-decoration: underline;
+    margin-bottom: 0.25em;
+}
+
+.user-message .message-content {
+    white-space: pre-wrap;
+}
+
 
 form {
     display: flex;
@@ -224,7 +263,42 @@ form button {
     align-items: center;
     justify-content: center;
     padding: 4px;
-
     margin-left: 8px;
 }
 
+.email-edit-form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.email-edit-label {
+    min-width: 120px;
+    font-weight: bold;
+}
+
+.email-edit-input {
+    max-width: 600px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.email-edit-submit {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.5rem;
+    cursor: pointer;
+    max-width: 120px;
+    width: 100%;
+}
+
+.email-edit-cancel {
+    background-color: #ccc;
+    border: none;
+    padding: 0.4rem 0.5rem;
+    cursor: pointer;
+    max-width: 120px;
+    width: 100%;
+}

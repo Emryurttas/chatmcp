@@ -1,6 +1,7 @@
 import { Server as HttpServer } from "http";
 import { Server as IoServer, Socket } from "socket.io";
 import { Redis } from "iovalkey";
+import { idAsString } from "../utils/id-as-string";
 
 export class DiscussServer {
     private static io: IoServer;
@@ -37,7 +38,9 @@ export class DiscussServer {
     }
      
     private static onClientConnection(socket: Socket): void {
+        const user = socket.request.session.user;
         const userName = socket.request.session.user.userName;
+        const userId = idAsString(user._id);
         const info = `${userName} a rejoint la discussion`;
         console.log(info);
         DiscussServer.publishClient.publish('info', info);
@@ -45,6 +48,7 @@ export class DiscussServer {
         socket.on('message', (messageContent: string) => {
             const messageData = {
                 sender: userName,
+                userId: userId,
                 date: new Date().toISOString(),
                 content: messageContent
             };

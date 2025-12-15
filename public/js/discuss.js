@@ -24,6 +24,26 @@ socket.on('message', (messageData) => {
         const article = document.createElement('article');
         article.className = 'user-message';
 
+        const messageWrapper = document.createElement('div');
+        messageWrapper.className = 'message-wrapper';
+
+        const avatar = document.createElement('img');
+        avatar.className = 'message-avatar';
+        
+        const avatarUrl = messageData.userId 
+            ? `/user/${messageData.userId}/avatar` 
+            : '/user/default/avatar';
+        
+        console.log('URL avatar construite:', avatarUrl);
+        
+        avatar.src = avatarUrl;
+        avatar.alt = `Avatar de ${messageData.sender}`;
+        avatar.width = 50;
+        avatar.height = 50;
+
+        const messageContent = document.createElement('div');
+        messageContent.className = 'message-body';
+
         const header = document.createElement('div');
         header.className = 'message-header';
         header.textContent = `${messageData.sender} le ${new Date(messageData.date).toLocaleString()}`;
@@ -32,8 +52,13 @@ socket.on('message', (messageData) => {
         content.className = 'message-content';
         content.textContent = messageData.content;
 
-        article.appendChild(header);
-        article.appendChild(content);
+        messageContent.appendChild(header);
+        messageContent.appendChild(content);
+
+        messageWrapper.appendChild(avatar);
+        messageWrapper.appendChild(messageContent);
+
+        article.appendChild(messageWrapper);
 
         chatDiv.appendChild(article);
     }
