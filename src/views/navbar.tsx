@@ -9,6 +9,7 @@ export function NavBar(props: PropsWithChildren<{
     chatTitle?: string;
     chatId?: string;
     chatCount?: number;
+    isDiscussPage?: boolean;
 }>): JSX.Element {
     return (
         <nav style={{
@@ -27,10 +28,16 @@ export function NavBar(props: PropsWithChildren<{
                 />
                 <a href="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>ChatMCP</a>
 
-                {props.chatTitle && props.chatId && (
+                {props.chatTitle && props.chatId && !props.isDiscussPage && (
                     <ChatTitleDisplay title={props.chatTitle} chatId={props.chatId} />
                 )}
             </div>
+
+            {props.isDiscussPage && (
+                <div style={{ flex: 1, textAlign: 'center'}}>
+                    Salon de discussion
+                </div>
+            )}
 
             {typeof props.chatCount === 'number' && <ChatCount count={props.chatCount} />}
 

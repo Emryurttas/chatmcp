@@ -28,7 +28,7 @@ export function discussPageView(props: { conversationId: string; user: User; mes
                     <script src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/sse.js"></script>
                 </head>
                 <body>
-                    {NavBar({ user: displayUser, chatTitle: "Salon de discussion", chatId: props.conversationId })}
+                    {NavBar({ user: displayUser, chatId: props.conversationId, isDiscussPage: true })}
 
                     <div id="chat" hx-ext="render-markdown" hx-swap="beforeend">
                         {props.messages && <MessageItems messages={props.messages} />}
