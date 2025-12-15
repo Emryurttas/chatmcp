@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --env-file=.env dist/index.js",
+    "start": "node --env-file=.env dist/index.js 7000",
     "watch": "npx tsc-watch --onSuccess \"npm run start\"",
-    "cli": "node --env-file=.env dist/cli.js"
+    "cli": "node --env-file=.env dist/cli.js",
+    "start:7042": "node --env-file=.env dist/index.js 7042"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +21,7 @@
     "@types/express": "^5.0.3",
     "@types/express-session": "^1.18.2",
     "@types/node": "^24.3.1",
+    "@types/socket.io": "^3.0.1",
     "eslint": "^9.34.0",
     "tsc-watch": "^7.1.1",
     "typescript": "^5.9.2",

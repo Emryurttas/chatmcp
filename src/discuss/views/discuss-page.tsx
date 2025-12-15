@@ -4,7 +4,7 @@ import { NavBar } from '../../views/navbar';
 import { MessageItems } from '../../chat/views/chat';
 
 export function discussPageView(props: { conversationId: string; user: User; messages?: ModelMessage[] }) {
-    const displayUser = props.user?.userName ? props.user : { userName: 'Invité' };
+    const displayUser = props.user;
 
     return (
         <>
@@ -28,7 +28,7 @@ export function discussPageView(props: { conversationId: string; user: User; mes
                     <script src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/sse.js"></script>
                 </head>
                 <body>
-                    {NavBar({ user: displayUser, chatTitle: "Discussion", chatId: props.conversationId })}
+                    {NavBar({ user: displayUser, chatTitle: "Salon de discussion", chatId: props.conversationId })}
 
                     <div id="chat" hx-ext="render-markdown" hx-swap="beforeend">
                         {props.messages && <MessageItems messages={props.messages} />}
@@ -45,7 +45,7 @@ export function discussPageView(props: { conversationId: string; user: User; mes
 
                     <script type="module" src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/autosize-textarea.js"></script>
 
-                    <div id="conversation-id" style={{ display: 'none' }}>
+                    <div id="conversation-id">
                         {props.conversationId}
                     </div>
 
