@@ -128,7 +128,7 @@ export class UserController{
         }
     }
 
-        public editAvatar(req: Request, res: Response): void {
+    public editAvatar(req: Request, res: Response): void {
         const user = this.getUserFromSession(req, res);
         const component = AvatarEdit({ userId: idAsString(user._id) });
         res.send(component);

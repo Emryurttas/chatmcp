@@ -1,36 +1,42 @@
-.email-edit-form {
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 2rem;
+}
+
+.profile-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.profile-row strong {
+    min-width: 120px;
+}
+
+.profile-value {
+    font-size: 1rem;
+}
+
+.profile-edit {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    width: 100%;
 }
 
-.email-edit-label {
-    min-width: 120px;
-    font-weight: bold;
+.avatar-edit {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.email-edit-input {
-    max-width: 600px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.avatar-edit img {
+    border-radius: 50%;
 }
 
-.email-edit-submit {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 0.4rem 0.5rem;
-    cursor: pointer;
-    max-width: 120px;
-    width: 100%;
-}
-
-.email-edit-cancel {
-    background-color: #ccc;
-    border: none;
-    padding: 0.4rem 0.5rem;
-    cursor: pointer;
-    max-width: 120px;
-    width: 100%;
+.profile-error {
+    color: red;
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
 }
