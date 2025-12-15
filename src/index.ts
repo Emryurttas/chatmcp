@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import session from 'express-session';
+import fileUpload from 'express-fileupload';
 import { valkeyStore } from './services/valkey';
 import { HomeView } from './views/home';
 import { ErrorPageView } from './views/error/error-page';
@@ -27,6 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(express.static('public'));
+app.use(fileUpload({ limits: { fileSize: 5 * 1024 * 1024 }, abortOnLimit: true, createParentPath: true }));
 
 app.get('/', (req: Request, res: Response) => {
     const homeViewProps: { title: string; user?: { userName: string } } = {
