@@ -2,6 +2,8 @@ import { Router } from 'express';
 import { userController } from './user.controller';
 import { z } from 'zod';
 import { validateBody } from '../utils/validator';
+import path from 'path';
+import { idAsString } from '../utils/id-as-string';
 
 const userRouter = Router();
 
@@ -40,5 +42,10 @@ userRouter.post(
   validateBody(updateEmailSchema),
   userController.updateEmail.bind(userController)
 );
+
+userRouter.get('/user/editAvatar', userController.editAvatar.bind(userController));
+userRouter.get('/user/displayAvatar', userController.displayAvatar.bind(userController));
+userRouter.post('/user/updateAvatar', userController.updateAvatar.bind(userController));
+
 
 export default userRouter;
