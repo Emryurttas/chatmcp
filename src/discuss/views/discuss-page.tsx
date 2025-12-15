@@ -1,7 +1,7 @@
 import { ModelMessage } from 'ai';
 import { User } from '../../user/user';
 import { NavBar } from '../../views/navbar';
-import { MessageItem, MessageItems } from '../../chat/views/chat';
+import { MessageItems } from '../../chat/views/chat';
 
 export function discussPageView(props: { conversationId: string; user: User; messages?: ModelMessage[] }) {
     const displayUser = props.user?.userName ? props.user : { userName: 'Invité' };

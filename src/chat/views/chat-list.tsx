@@ -2,6 +2,7 @@ import { User } from "../../user/user";
 import { ChatInfo } from "../chat";
 import { ChatTitleDisplay } from "./chat-title";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function ChatListItem(chat: ChatInfo, totalCount: number): JSX.Element {
     const chatIdStr = chat._id?.toString() || '';
 

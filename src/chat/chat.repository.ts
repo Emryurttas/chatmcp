@@ -143,6 +143,7 @@ class ChatRepository {
 
     async aggregateByUserId(userId: string, pageSize: number = 5, page: number = 1, searchText: string = ''): Promise<{ count: number; chatInfos: ChatInfo[] }> {
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const matchStage: any = { userId: new ObjectId(userId) };
 
         if (searchText && searchText.trim().length > 0) {

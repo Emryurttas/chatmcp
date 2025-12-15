@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { ok } from 'assert';
 import { ChatModel } from './chat.model';
 import { ChatView } from './views/chat';
 import { ChatItemView } from './views/chat-item';
@@ -12,7 +11,6 @@ import { userController } from '../user/user.controller';
 import { ChatList } from './views/chat-list';
 import { ChatListPage } from './views/chat-list-page';
 import { ChatSearchForm } from './views/chatSearchForm';
-import { ChatCount } from './views/chatCount';
 
 export class ChatController {
     private getUserId(req: Request, res: Response): string {
@@ -245,10 +243,10 @@ export class ChatController {
 
             if (userId) {
                 const { count } = await chatRepository.aggregateByUserId(userId, 1, 1);
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 remainingCount = count;
             }
 
-            const html = ChatCount({ count: remainingCount });
             res.status(200);
         } else {
             res.sendStatus(204);

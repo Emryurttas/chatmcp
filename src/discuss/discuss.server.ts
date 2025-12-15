@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Server as HttpServer } from "http";
 import { Server as IoServer, Socket } from "socket.io";
 import { Redis } from "iovalkey";
-import { valkey } from "../services/valkey";
 
 export class DiscussServer {
     private static io: IoServer;
@@ -26,7 +26,6 @@ export class DiscussServer {
         });
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private static onClientConnection(socket: Socket): void {
         const userName = socket.request.session.user.userName;
         const info = `${userName} a rejoint la discussion`;
