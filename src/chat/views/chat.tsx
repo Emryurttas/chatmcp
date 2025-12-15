@@ -64,8 +64,6 @@ export function ChatView(props: { conversationId: string; messages?: ModelMessag
                         <tag of="render-markdown">
                             <script type="text/markdown">
                                 # Bienvenue sur ChatMCP
-                                Posez vos questions ci-dessous et recevez des réponses instantanément.
-                                Utilisez le Markdown pour formater vos messages si besoin.
                             </script>
                             <script type="text/markdown">
                                 Commencez dès maintenant à interagir avec le chatbot! Chaque réponse sera affichée au format Markdown ici.

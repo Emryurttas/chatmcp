@@ -26,17 +26,16 @@ socket.on('message', (messageData) => {
 
         const header = document.createElement('div');
         header.className = 'message-header';
-        header.textContent = `${messageData.sender} - ${new Date(messageData.date).toLocaleString()}`;
+        header.textContent = `${messageData.sender} le ${new Date(messageData.date).toLocaleString()}`;
 
         const content = document.createElement('div');
         content.className = 'message-content';
-        content.innerHTML = escapeHtml(messageData.content);
+        content.textContent = messageData.content;
 
         article.appendChild(header);
         article.appendChild(content);
 
         chatDiv.appendChild(article);
-        
     }
 });
 

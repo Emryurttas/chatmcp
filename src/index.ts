@@ -53,6 +53,7 @@ app.get('/erreur', () => {
     throw new Error("Ceci est une erreur ");
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (req.headers['hx-request']) {
         res.send(ErrorDialogView({ message: err.message }));
