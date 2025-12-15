@@ -1,16 +1,19 @@
 import { Server as HttpServer } from "http";
 import { Server as IoServer, Socket } from "socket.io";
+import { Redis } from "iovalkey";
 
 export class DiscussServer {
     private static io: IoServer;
+    private static publishClient: Redis;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public static create(httpServer: HttpServer, sessionMiddleware: any) {
+        DiscussServer.publishClient = new Redis();
+        
         DiscussServer.io = new IoServer(httpServer);
         DiscussServer.io.engine.use(sessionMiddleware);
         DiscussServer.io.on('connection', DiscussServer.onClientConnection);
     }
-
      
     private static onClientConnection(socket: Socket): void {
         const userName = socket.request.session.user.userName;
