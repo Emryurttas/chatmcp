@@ -63,7 +63,6 @@ html, body {
     white-space: pre-wrap;
 }
 
-
 form {
     display: flex;
     align-items: center;
@@ -251,6 +250,16 @@ form button {
     cursor: pointer;
     color: #f3f4f6;
 }
+#chat-count {
+    position: absolute;
+    left: 45%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+    white-space: nowrap;
+}
+
 .btn-search {
     width: 46px;
     height: 36px;
@@ -263,8 +272,11 @@ form button {
     align-items: center;
     justify-content: center;
     padding: 4px;
-    margin-left: 8px;
+
+    position: relative;
+    top: 8px;
 }
+
 
 .email-edit-form {
     display: flex;

@@ -2,7 +2,7 @@ export function TitleEdit({ title, chatId }: { title: string; chatId: string }):
     return (
         <form
             hx-post={`/chat/updateTitle/${chatId}`}
-            hx-target="#title-display"
+            hx-target={`#title-display-${chatId}`}
             hx-swap="innerHTML"
             class="title-edit-form"
         >
@@ -22,7 +22,7 @@ export function TitleEdit({ title, chatId }: { title: string; chatId: string }):
             <button
                 type="button"
                 hx-get={`/chat/displayTitle/${chatId}`}
-                hx-target="#title-display"
+                hx-target={`#title-display-${chatId}`}
                 hx-swap="innerHTML"
                 class="title-edit-cancel"
             >
