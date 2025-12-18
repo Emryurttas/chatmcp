@@ -19,7 +19,9 @@ export function ProfilePage(props: PropsWithChildren<{ user: User }>): JSX.Eleme
                 <script src="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/js/htmx.js"></script>
             </head>
             <body>
-                <NavBar user={user}></NavBar>
+                <NavBar user={user}>
+                    Édition du profil
+                </NavBar>
                 <main>
                     <div>
                         <strong>Nom d'utilisateur :</strong>

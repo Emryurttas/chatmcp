@@ -11,6 +11,7 @@ import { userController } from '../user/user.controller';
 import { ChatList } from './views/chat-list';
 import { ChatListPage } from './views/chat-list-page';
 import { ChatSearchForm } from './views/chatSearchForm';
+import { ChatCount } from './views/chatCount';
 
 export class ChatController {
     private getUserId(req: Request, res: Response): string {
@@ -232,6 +233,7 @@ export class ChatController {
         res.send(ChatSearchForm({ searchText }));
     }
 
+
     public async delete(req: Request, res: Response): Promise<void> {
         const chatId = req.params.id as string;
 
@@ -243,13 +245,12 @@ export class ChatController {
 
             if (userId) {
                 const { count } = await chatRepository.aggregateByUserId(userId, 1, 1);
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 remainingCount = count;
             }
 
-            res.status(200);
+            res.status(200).send(ChatCount({ count: remainingCount }));
         } else {
-            res.sendStatus(204);
+            res.sendStatus(404);
         }
     }
 }

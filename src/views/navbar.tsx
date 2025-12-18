@@ -33,13 +33,15 @@ export function NavBar(props: PropsWithChildren<{
                 )}
             </div>
 
-            {props.isDiscussPage && (
-                <div style={{ flex: 1, textAlign: 'center'}}>
-                    Salon de discussion
-                </div>
-            )}
+            <div style={{ flex: 1, textAlign: 'center'}}>
+                {props.isDiscussPage ? 'Salon de discussion' : props.children}
+            </div>
 
-            {typeof props.chatCount === 'number' && <ChatCount count={props.chatCount} />}
+            {typeof props.chatCount === 'number' && (
+                <span id="chat-count">
+                    <ChatCount count={props.chatCount} />
+                </span>
+            )}
 
             <ul style={{
                 listStyle: 'none',
