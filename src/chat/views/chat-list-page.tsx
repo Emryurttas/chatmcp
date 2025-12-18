@@ -16,6 +16,7 @@ export function ChatListPage(props: { user: User; chatInfos: ChatInfo[]; page: n
                     <title>Liste des conversations</title>
                     <link rel="stylesheet" href="/css/pico.min.css" />
                     <link rel="stylesheet" href="/css/chat.css" />
+                    <link rel="stylesheet" href="/css/user.css" />
                     <link rel="icon" href="/images/bot.png" />
                     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
                     <script src="https://unpkg.com/htmx.org@1.9.4/dist/htmx.min.js"></script>

@@ -40,3 +40,19 @@
     font-size: 0.9rem;
     margin-left: 0.5rem;
 }
+nav ul {
+    align-items: center !important;
+}
+
+nav ul li {
+    display: flex;
+    align-items: center;
+}
+
+.chat-dropdown-toggle,
+.user-dropdown-toggle {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0.5em 1em;
+}
