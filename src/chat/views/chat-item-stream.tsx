@@ -5,7 +5,7 @@ export interface ChatItemProps {
 
 export function ChatItemStreamView({ prompt, id }: ChatItemProps) {
     return (
-        <article className="chat-item">
+        <article class="chat-item">
             <p>{prompt}</p>
             <div
                 hx-ext="sse,render-markdown-stream"

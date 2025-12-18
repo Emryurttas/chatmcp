@@ -5,11 +5,6 @@ export function ChatCount(props: PropsWithChildren<{ count: number }>): JSX.Elem
         <div
             id="chat-count"
             hx-swap-oob="true"
-            style={{
-                textAlign: 'center',
-                flexGrow: 1,
-                color: 'white',
-            }}
         >
             <span>{props.count} conversation{props.count > 1 ? 's' : ''}</span>
 

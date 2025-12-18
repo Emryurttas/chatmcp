@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function AvatarEdit({ userId }: { userId: string }): JSX.Element {
     return (
         <form

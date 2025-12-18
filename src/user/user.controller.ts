@@ -122,6 +122,7 @@ export class UserController{
         try {
             await fs.stat(avatarPath);
             res.sendFile(avatarPath);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             const defaultAvatarPath = path.join(process.cwd(), 'restricted', 'avatars', 'default_avatar.webp');
             res.sendFile(defaultAvatarPath);
@@ -148,6 +149,7 @@ export class UserController{
             return;
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const avatarFile = req.files.avatar as any;
         const uploadDir = path.join(process.cwd(), 'restricted', 'avatars');
         const uploadPath = path.join(uploadDir, `${user._id}.png`);
