@@ -12,6 +12,7 @@ export function ProfilePage(props: PropsWithChildren<{ user: User }>): JSX.Eleme
                 <meta charset="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                 <link rel="stylesheet" href="/css/pico.min.css" />
+                <link rel="stylesheet" href="/css/chat.css" />
                 <link rel="stylesheet" href="/css/user.css" />
                 <link rel="icon" href="/images/bot.png" />
                 <link href="https://iut-info.univ-reims.fr/users/nourrit/chatmcp/css/fontawesome.min.css" rel="stylesheet" />
@@ -30,7 +31,7 @@ export function ProfilePage(props: PropsWithChildren<{ user: User }>): JSX.Eleme
                         </ul>
 
                         <strong>Avatar :</strong>
-                        <div id="avatar-display" style={{ marginBottom: "1em" }}>
+                        <div id="avatar-display">
                             <AvatarDisplay userId={idAsString(user._id)} />
                         </div>
 

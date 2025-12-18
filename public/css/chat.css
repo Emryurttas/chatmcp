@@ -252,10 +252,10 @@ form button {
     color: #f3f4f6;
 }
 .btn-search {
-    width: 36px;
+    width: 46px;
     height: 36px;
     font-size: 1.2rem;
-    background-color: #688fe5;
+    background-color: #606060;
     color: white;
     border-radius: 4px;
     cursor: pointer;

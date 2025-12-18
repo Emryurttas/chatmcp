@@ -83,37 +83,33 @@ export class UserController{
     }
 
     public async updateEmail(req: Request, res: Response): Promise<void> {
-        try {
-            const user = this.getUserFromSession(req, res);
-            const { email } = req.body;
 
-            if (!email || typeof email !== 'string') {
-                const component = EmailDisplay({ email: user.email, message: "Email invalide" });
-                res.status(400).send(component);
-                return;
-            }
+        const user = this.getUserFromSession(req, res);
+        const { email } = req.body;
 
-            if (!user._id) {
-                const component = EmailDisplay({ email: user.email, message: "ID utilisateur manquant" });
-                res.status(400).send(component);
-                return;
-            }
-
-            await userRepository.updateEmail(user._id.toString(), email);
-
-            user.email = email;
-            if (req.session.user) req.session.user.email = email;
-
-            const component = EmailDisplay({ email });
-            res.send(component);
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (err) {
-            const user = req.session.user;
-            const component = EmailDisplay({ email: user?.email || "", message: "Erreur lors de la mise à jour." });
-            res.status(500).send(component);
+        if (!email || typeof email !== 'string') {
+            res.status(400);
+            return;
         }
+
+        if (!user._id) {
+            const component = EmailDisplay({ email: user.email, message: "ID utilisateur manquant" });
+            res.status(400).send(component);
+            return;
+        }
+
+        await userRepository.updateEmail(user._id.toString(), email);
+
+        user.email = email;
+        if (req.session.user) 
+        {
+            req.session.user.email = email;
+        }
+
+        const component = EmailDisplay({ email });
+        res.send(component);
     }
+
     public async avatar(req: Request, res: Response): Promise<void> {
         const userId = req.params.id;
         
