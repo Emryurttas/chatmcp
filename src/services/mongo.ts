@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
-        
-const uri = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}`;
-const client = new MongoClient(uri)
-      
+
+const uri = process.env.MONGO_URI ?? (() => { throw new Error("MONGO_URI is not defined"); })();
+const client = new MongoClient(uri);
+
 export const mongodb = client.db(process.env.MONGO_DB, { ignoreUndefined: true });
