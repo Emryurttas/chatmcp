@@ -1,15 +1,12 @@
 import { google } from '@ai-sdk/google';
 import { generateText, streamText, smoothStream, ToolSet, stepCountIs, StepResult, ModelMessage } from 'ai';
-import { Experimental_StdioMCPTransport } from "ai/mcp-stdio";
 import { chatRepository } from './chat.repository';
-import { experimental_createMCPClient as createMCPClient } from 'ai';
 
 const MODEL_NAME = google('models/gemini-2.5-flash');
 
 export class ChatModel {
     private _chatId: string;
     private _title: string;
-    private static _tools: ToolSet | null = null;
 
     static async create(userId: string, chatId?: string): Promise<ChatModel> {
         if (chatId) {
@@ -49,31 +46,11 @@ export class ChatModel {
 
     async createGenerationConfig(toolCallNotification: (toolName: string) => void) {
         const messages = await this.messages();
-
-        if (ChatModel._tools === null) {
-            const timeTransport = new Experimental_StdioMCPTransport({
-                command: 'node',
-                args: ['/home/butinfo/mcp-servers/mcp-time/dist/server.js'],
-            });
-            const timeClient = await createMCPClient({ transport: timeTransport });
-            const timeTools = await timeClient.tools();
-            
-            const osmTransport = new Experimental_StdioMCPTransport({
-                command: '/home/butinfo/bin/uvx',
-                args: ['osm-mcp-server'],
-            });
-            const osmClient = await createMCPClient({ transport: osmTransport });
-            const osmTools = await osmClient.tools();
-            
-            ChatModel._tools = {
-                ...timeTools,
-                ...osmTools
-            };
-        }
+        const tools: ToolSet = {};
 
         return {
             model: MODEL_NAME,
-            tools: ChatModel._tools,
+            tools,
             stopWhen: stepCountIs(10),
             onStepFinish: (result: StepResult<ToolSet>): void => {
                 if (result.dynamicToolCalls) {
