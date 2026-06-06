@@ -3,15 +3,17 @@ import { Server as IoServer, Socket } from "socket.io";
 import { Redis } from "iovalkey";
 import { idAsString } from "../utils/id-as-string";
 
+const redisUrl = process.env.REDIS_URL ?? "redis://127.0.0.1:6379";
+
 export class DiscussServer {
     private static io: IoServer;
     private static publishClient: Redis;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public static create(httpServer: HttpServer, sessionMiddleware: any) {
-        DiscussServer.publishClient = new Redis();
+        DiscussServer.publishClient = new Redis(redisUrl);
         
-        const subscribeClient = new Redis();
+        const subscribeClient = new Redis(redisUrl);
         
         subscribeClient.subscribe("info", "message", (err, count) => {
             if (err) {
