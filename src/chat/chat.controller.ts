@@ -110,7 +110,7 @@ export class ChatController {
 
             const stream = chatInstance.fetchAnswerStream(toolNotifier);
             for await (const token of stream) {
-                const formatted = token.replace(/\n/g, 'RENDER-MD-LF');
+                const formatted = token.replace(/\n/g, ' ');
                 res.write(`event: token\ndata: ${formatted}\n\n`);
             }
             res.write(`event: close\ndata: \n\n`);

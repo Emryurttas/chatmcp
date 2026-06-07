@@ -196,6 +196,12 @@ form button {
     flex-direction: column;
 }
 
+.chat-item div p {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
 .chat-header {
     background-color: #11265eff;
     color: white;

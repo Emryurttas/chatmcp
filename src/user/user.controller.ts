@@ -7,23 +7,21 @@ import { ObjectId } from 'bson';
 import { User } from './user';
 import { AvatarDisplay, EmailDisplay, ProfilePage } from './views/profile';
 import { EmailEdit } from './views/emailEdit';
-import { promises as fs } from 'fs';
-import path from 'path';
-import { idAsString } from '../utils/id-as-string';
 import { AvatarEdit } from './views/avatarEdit';
+import { idAsString } from '../utils/id-as-string';
 
 export class UserController{
     public async showUser(req: Request, res: Response): Promise<void> {
-
         const users = await userRepository.findAll();
         const page = UserView({users});
-
         res.send(page);
     }
+
     public loginForm(req: Request, res: Response): void{
         const page = loginForm();
         res.send(page);
     }
+
     public async login(req: Request, res: Response): Promise<void> {
         const { userName, password } = req.body;
 
@@ -40,9 +38,7 @@ export class UserController{
             if (err) {
                 throw err;
             }
-
             req.session.user = user;
-
             res.redirect('/');
         });
     }
@@ -65,7 +61,6 @@ export class UserController{
 
     public profile(req: Request, res: Response): void {
         const user = this.getUserFromSession(req, res);
-
         const page = ProfilePage({ user });
         res.send(page);
     }
@@ -83,7 +78,6 @@ export class UserController{
     }
 
     public async updateEmail(req: Request, res: Response): Promise<void> {
-
         const user = this.getUserFromSession(req, res);
         const { email } = req.body;
 
@@ -99,10 +93,8 @@ export class UserController{
         }
 
         await userRepository.updateEmail(user._id.toString(), email);
-
         user.email = email;
-        if (req.session.user) 
-        {
+        if (req.session.user) {
             req.session.user.email = email;
         }
 
@@ -112,16 +104,22 @@ export class UserController{
 
     public async avatar(req: Request, res: Response): Promise<void> {
         const userId = req.params.id;
-        
-        const avatarPath = path.join(process.cwd(), 'restricted', 'avatars', `${userId}.png`);
-        
-        try {
-            await fs.stat(avatarPath);
-            res.sendFile(avatarPath);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (error) {
-            const defaultAvatarPath = path.join(process.cwd(), 'restricted', 'avatars', 'default_avatar.webp');
-            res.sendFile(defaultAvatarPath);
+
+        const avatarBase64 = await userRepository.getAvatar(userId);
+
+        if (avatarBase64) {
+            const buffer = Buffer.from(avatarBase64, 'base64');
+            res.setHeader('Content-Type', 'image/png');
+            res.send(buffer);
+        } else {
+            // Retourne un SVG d'avatar par défaut
+            const defaultSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+                <circle cx="32" cy="32" r="32" fill="#ccc"/>
+                <circle cx="32" cy="24" r="12" fill="#fff"/>
+                <ellipse cx="32" cy="56" rx="20" ry="14" fill="#fff"/>
+            </svg>`;
+            res.setHeader('Content-Type', 'image/svg+xml');
+            res.send(defaultSvg);
         }
     }
 
@@ -147,14 +145,17 @@ export class UserController{
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const avatarFile = req.files.avatar as any;
-        const uploadDir = path.join(process.cwd(), 'restricted', 'avatars');
-        const uploadPath = path.join(uploadDir, `${user._id}.png`);
+        const avatarBase64 = avatarFile.data.toString('base64');
 
-        await fs.mkdir(uploadDir, { recursive: true });
-        await avatarFile.mv(uploadPath);
+        await userRepository.updateAvatar(idAsString(user._id), avatarBase64);
+
+        if (req.session.user) {
+            req.session.user.avatar = avatarBase64;
+        }
 
         const component = AvatarDisplay({ userId: idAsString(user._id) });
         res.send(component);
     }
 }
+
 export const userController = new UserController();

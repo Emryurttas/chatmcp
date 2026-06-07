@@ -8,17 +8,11 @@ export function ChatItemStreamView({ prompt, id }: ChatItemProps) {
         <article class="chat-item">
             <p>{prompt}</p>
             <div
-                id={`stream-${id}`}
-                hx-ext="sse"
+                hx-ext="sse,render-markdown-stream"
                 sse-connect={`/chat/stream/${id}`}
                 sse-swap="token"
                 sse-close="close"
                 hx-swap="beforeend"
-                hx-on--sse-close={`
-                    const el = document.getElementById('stream-${id}');
-                    const raw = el.innerText;
-                    el.outerHTML = '<tag of=\\"render-markdown\\"><script type=\\"text/markdown\\">' + raw + '<\/script><\/tag>';
-                `}
             ></div>
         </article>
     );
