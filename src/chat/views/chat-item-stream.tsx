@@ -12,7 +12,6 @@ export function ChatItemStreamView({ prompt, id }: ChatItemProps) {
                 sse-connect={`/chat/stream/${id}`}
                 sse-swap="token"
                 sse-close="close"
-                hx-swap="none"
             ></div>
         </article>
     );
