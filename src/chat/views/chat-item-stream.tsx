@@ -7,13 +7,15 @@ export function ChatItemStreamView({ prompt, id }: ChatItemProps) {
     return (
         <article class="chat-item">
             <p>{prompt}</p>
-            <div
-                hx-ext="sse,render-markdown-stream"
-                sse-connect={`/chat/stream/${id}`}
-                sse-swap="token"
-                sse-close="close"
-                hx-swap="beforeend"
-            ></div>
+            <tag of="render-markdown-stream">
+                <div
+                    hx-ext="sse"
+                    sse-connect={`/chat/stream/${id}`}
+                    sse-swap="token"
+                    sse-close="close"
+                    hx-swap="innerHTML"
+                ></div>
+            </tag>
         </article>
     );
 }
