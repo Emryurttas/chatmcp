@@ -46,7 +46,7 @@ export class ChatController {
     public async sendPrompt(req: Request, res: Response): Promise<void> {
         const userId = this.getUserId(req, res);
         const prompt = req.body.prompt;
-        const streamingMode = req.body.streamingMode === 'true';
+        const streamingMode = req.body.streamingMode === 'true' || req.body.streamingMode === 'on';
         let conversationId = req.params.id as string;
 
         if (!prompt || prompt.trim().length === 0) {

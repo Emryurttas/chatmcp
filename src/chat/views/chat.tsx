@@ -86,7 +86,7 @@ export function ChatView(props: { conversationId: string; messages?: ModelMessag
 
                         <p>
                             <label>
-                                <input type="checkbox" name="streamingMode" />
+                                <input type="checkbox" name="streamingMode" value="true" />
                                 Mode streaming
                             </label>
                         </p>
