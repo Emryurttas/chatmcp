@@ -12,28 +12,23 @@ export function NavBar(props: PropsWithChildren<{
     isDiscussPage?: boolean;
 }>): JSX.Element {
     return (
-        <nav style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '0.5em 3%',
-            backgroundColor: '#2c3e50',
-            color: 'white'
-        }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1em' }}>
+        <nav class="app-navbar">
+            <div class="navbar-left">
                 <img 
                     src="/images/bot.png" 
                     alt="Chatbot Logo" 
-                    style={{ height: '2em', width: 'auto' }} 
+                    class="navbar-logo"
                 />
-                <a href="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>ChatMCP</a>
+                <a href="/" class="navbar-brand">ChatMCP</a>
 
                 {props.chatTitle && props.chatId && !props.isDiscussPage && (
-                    <ChatTitleDisplay title={props.chatTitle} chatId={props.chatId} />
+                    <span class="navbar-chat-title">
+                        <ChatTitleDisplay title={props.chatTitle} chatId={props.chatId} />
+                    </span>
                 )}
             </div>
 
-            <div style={{ flex: 1, textAlign: 'center'}}>
+            <div class="navbar-center">
                 {props.isDiscussPage ? 'Salon de discussion' : props.children}
             </div>
 
@@ -43,14 +38,7 @@ export function NavBar(props: PropsWithChildren<{
                 </span>
             )}
 
-            <ul style={{
-                listStyle: 'none',
-                display: 'flex',
-                gap: '1em',
-                margin: 0,
-                padding: 0,
-                alignItems: 'center'
-            }}>
+            <ul class="navbar-right">
                 <li>
                     <ChatDropdown user={props.user} />
                 </li>
