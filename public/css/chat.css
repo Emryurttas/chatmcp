@@ -175,6 +175,7 @@ form button {
     background-color: #ccc;
     color: black;
 }
+
 .chat-list {
     list-style: none;
     padding: 0;
@@ -250,6 +251,7 @@ form button {
     cursor: pointer;
     color: #f3f4f6;
 }
+
 #chat-count {
     position: absolute;
     left: 45%;
@@ -272,11 +274,9 @@ form button {
     align-items: center;
     justify-content: center;
     padding: 4px;
-
     position: relative;
     top: 8px;
 }
-
 
 .email-edit-form {
     display: flex;
@@ -313,4 +313,143 @@ form button {
     cursor: pointer;
     max-width: 120px;
     width: 100%;
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width: 768px) {
+
+    html, body {
+        height: 100dvh;
+    }
+
+    #chat {
+        padding: 6px;
+        margin-bottom: 6px;
+    }
+
+    .user-message {
+        padding: 0.75em;
+        margin-top: 0.5em;
+        gap: 0.5em;
+    }
+
+    .user-message .message-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    form {
+        gap: 6px;
+        padding: 6px;
+        flex-wrap: nowrap;
+    }
+
+    form textarea,
+    form input[type="text"] {
+        flex: 1;
+        min-width: 0;
+        font-size: 0.95rem;
+        margin-right: 0;
+    }
+
+    form button#send,
+    form button[type="submit"] {
+        width: auto !important;
+        min-width: 70px;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+    }
+
+    #conversation-id {
+        font-size: 0.7em;
+        padding: 2px 6px;
+    }
+
+    .navbar-title {
+        position: static;
+        transform: none;
+        left: auto;
+        font-size: 0.85rem;
+        flex: 1;
+        justify-content: center;
+    }
+
+    #chat-count {
+        position: static;
+        transform: none;
+        left: auto;
+        font-size: 0.8rem;
+        white-space: normal;
+    }
+
+    .chat-dropdown-menu {
+        position: fixed;
+        left: 5%;
+        right: 5%;
+        transform: none;
+        width: 90%;
+        z-index: 1000;
+    }
+
+    .title-edit-form {
+        flex-wrap: wrap;
+    }
+
+    .title-edit-input {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .chat-header {
+        font-size: 0.9rem;
+        padding: 0.5em 0.75em;
+    }
+
+    .chat-dates {
+        font-size: 0.8em;
+    }
+
+    .chat-footer {
+        font-size: 0.8em;
+        padding: 0.4em 0.75em;
+    }
+
+    .email-edit-form {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .email-edit-input {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .email-edit-submit,
+    .email-edit-cancel {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .user-message .message-avatar {
+        width: 28px;
+        height: 28px;
+    }
+
+    .user-message .message-header {
+        font-size: 0.85rem;
+    }
+
+    .user-message .message-content {
+        font-size: 0.9rem;
+    }
+
+    form button#send,
+    form button[type="submit"] {
+        min-width: 60px;
+        font-size: 0.85rem;
+    }
 }
