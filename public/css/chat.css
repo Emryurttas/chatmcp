@@ -196,7 +196,7 @@ form button {
     flex-direction: column;
 }
 
-.chat-item div p {
+.chat-item div[hx-ext] p {
     display: inline;
     margin: 0;
     padding: 0;
@@ -321,7 +321,6 @@ form button {
     width: 100%;
 }
 
-/* ===== MOBILE ===== */
 
 @media (max-width: 768px) {
 
