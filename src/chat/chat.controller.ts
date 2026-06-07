@@ -103,11 +103,9 @@ export class ChatController {
             res.setHeader('Connection', 'keep-alive');
             res.flushHeaders?.();
 
-            const notifications: string[] = [];
             const toolNotifier = (toolName: string) => {
                 const notification = `\`\`\`[Outil appelé] ${toolName}\`\`\``;
-                notifications.push(notification);
-                res.write(`event: token\ndata: ${notification}\n\n`);
+                res.write(`event: token\ndata: ${notification.replace(/\n/g, 'RENDER-MD-LF')}\n\n`);
             };
 
             const stream = chatInstance.fetchAnswerStream(toolNotifier);
